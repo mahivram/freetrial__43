@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Platform } from "react-native";
+import { Platform, View, TouchableOpacity } from "react-native";
 import { colors } from "../theme/colors";
 
 const TabLayout = () => {
@@ -14,8 +14,8 @@ const TabLayout = () => {
         tabBarStyle: {
           height: Platform.OS === "ios" ? 88 : 60,
           paddingHorizontal: 16,
-          paddingBottom: Platform.OS === "ios" ? 80 : 30,
-          paddingTop: 2,
+          paddingBottom: Platform.OS === "ios" ? 28 : 55,
+          paddingTop: 8,
           backgroundColor: colors.common.white,
           borderTopWidth: 1,
           borderTopColor: colors.gray[200],
@@ -24,10 +24,53 @@ const TabLayout = () => {
         tabBarItemStyle: {
           paddingVertical: 8,
         },
+        tabBarIconStyle: {
+          marginBottom: Platform.OS === 'ios' ? 0 : -4,
+        },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '500',
-          paddingBottom: Platform.OS === "ios" ? 0 : 4,
+          marginTop: Platform.OS === 'ios' ? 0 : -4,
+        },
+        tabBarButton: (props) => {
+          const { accessibilityState, style, onPress } = props;
+          const isSelected = accessibilityState?.selected;
+
+          return (
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <TouchableOpacity
+                onPress={onPress}
+                style={[
+                  {
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    paddingVertical: 8,
+                    width: '100%',
+                    position: 'relative',
+                  },
+                  style,
+                ]}>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: -4,
+                    width: 56,
+                    height: 56,
+                    borderRadius: 28,
+                    backgroundColor: isSelected ? `${colors.primary.main}15` : 'transparent',
+                    transform: [{ scale: isSelected ? 1 : 0.8 }],
+                  }}
+                />
+                {props.children}
+              </TouchableOpacity>
+            </View>
+          );
         },
       }}
     >
