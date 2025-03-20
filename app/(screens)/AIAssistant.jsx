@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function page4() {
+const AIAssistant = () => {
   return (
     <View>
-      <Text>page4</Text>
+      <Text>AIAssistant</Text>
     </View>
   )
 }
+
+export default AIAssistant

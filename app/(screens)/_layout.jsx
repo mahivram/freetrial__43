@@ -1,26 +1,88 @@
 import { Stack } from "expo-router";
 
-const ScreenLayout = () => {
-  return ( 
-    
+export default function ScreensLayout() {
+  return (
     <Stack
-    screenOptions={{ headerShown: true }}>
-    
-    <Stack.Screen
-      name="page2"
-      options={{ title: "Page 2", headerTitleAlign: "center" }}
-    />
-    <Stack.Screen
-      name="page3"
-      options={{ title: "Page 2", headerTitleAlign: "center" }}
-    />
-    <Stack.Screen
-      name="page4"
-      options={{ title: "Page 2", headerTitleAlign: "center" }}
-    />
-  </Stack>
-
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#fff',
+        },
+        headerTintColor: '#000',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        headerTitleAlign: "center",
+        animation: "slide_from_right",
+      }}
+    >
+      <Stack.Screen
+        name="skillTutorials"
+        options={({ route }) => ({
+          title: route.params?.skill || "Tutorials",
+          headerTitleAlign: "center",
+        })}
+      />
+      <Stack.Screen
+        name="videoPlayer"
+        options={{
+          title: "Video Player",
+          headerTitleAlign: "center",
+          presentation: "modal",
+        }}
+      />
+      <Stack.Screen
+        name="skillDetails"
+        options={({ route }) => ({
+          title: route.params?.skill || "Skill Details",
+          headerTitleAlign: "center",
+        })}
+      />
+      <Stack.Screen
+        name="communityPost"
+        options={{
+          title: "Community Post",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="marketplace"
+        options={{
+          title: "Marketplace",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="productDetails"
+        options={{
+          title: "Product Details",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="emergency"
+        options={{
+          title: "Emergency",
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: '#ff4444',
+          },
+          headerTintColor: '#fff',
+        }}
+      />
+      <Stack.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          headerTitleAlign: "center",
+        }}
+      />
+    </Stack>
   );
-};
-
-export default ScreenLayout;
+}
