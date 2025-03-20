@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
+import { Link } from 'expo-router';
 
 const schemes = [
   {
@@ -112,7 +113,7 @@ const schemes = [
   }
 ];
 
-const SchemesScreen = ({ onBack }) => {
+const SchemesScreen = () => {
   const handleSchemePress = (scheme) => {
     if (scheme.website) {
       Linking.openURL(scheme.website).catch(err => {
@@ -168,11 +169,11 @@ const SchemesScreen = ({ onBack }) => {
       />
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={onBack}>
-            <Icon name="arrow-left" size={24} color={semantic.text.primary} />
-          </TouchableOpacity>
+          <Link href="../" asChild>
+            <TouchableOpacity style={styles.backButton}>
+              <Icon name="arrow-left" size={24} color={semantic.text.primary} />
+            </TouchableOpacity>
+          </Link>
           <Text style={styles.headerTitle}>Government Schemes</Text>
         </View>
         <ScrollView

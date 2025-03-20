@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,12 +6,30 @@ import {
   ScrollView,
   TouchableOpacity,
   StatusBar,
+  Modal,
 } from 'react-native';
 import { Link } from 'expo-router';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { colors, semantic } from '../theme/colors';
 
-const DashboardScreen = ({ userSkills = [], navigation }) => {
+const languages = [
+  { code: 'en', name: 'English', icon: 'EN' },
+  { code: 'hi', name: 'हिंदी', icon: 'हि' },
+  { code: 'te', name: 'తెలుగు', icon: 'తె' },
+  { code: 'ta', name: 'தமிழ்', icon: 'த' },
+  { code: 'gu', name: 'ગુજરાતી', icon: 'ગુ' },
+];
+
+const DashboardScreen = ({ userSkills = [] }) => {
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+
+  const handleLanguageSelect = (language) => {
+    setSelectedLanguage(language);
+    setShowLanguageModal(false);
+    // Here you would typically update the app's language context/state
+  };
+
   const mainCategories = [
     {
       id: '1',
@@ -91,12 +109,52 @@ const DashboardScreen = ({ userSkills = [], navigation }) => {
               })}
             </Text>
           </View>
-          <TouchableOpacity 
-            style={styles.profileButton}
-            onPress={() => navigation.navigate('profile')}>
-            <Icon name="account-circle" size={40} color={colors.primary.main} />
-          </TouchableOpacity>
+          <View style={styles.headerIcons}>
+            <TouchableOpacity 
+              style={styles.languageButton}
+              onPress={() => setShowLanguageModal(true)}>
+              <Icon name="translate" size={22} color={colors.primary.main} />
+            </TouchableOpacity>
+            <Link href="/(screens)/ProfileScreen" asChild>
+              <TouchableOpacity style={styles.profileButton}>
+                <Icon name="account-circle" size={40} color={colors.primary.main} />
+              </TouchableOpacity>
+            </Link>
+          </View>
         </View>
+
+        {/* Language Selection Modal */}
+        <Modal
+          visible={showLanguageModal}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowLanguageModal(false)}>
+          <TouchableOpacity
+            style={styles.modalOverlay}
+            activeOpacity={1}
+            onPress={() => setShowLanguageModal(false)}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Select Language</Text>
+              {languages.map((language) => (
+                <TouchableOpacity
+                  key={language.code}
+                  style={[
+                    styles.languageOption,
+                    selectedLanguage.code === language.code && styles.selectedLanguage,
+                  ]}
+                  onPress={() => handleLanguageSelect(language)}>
+                  <View style={styles.languageIconContainer}>
+                    <Text style={styles.languageIconText}>{language.icon}</Text>
+                  </View>
+                  <Text style={styles.languageName}>{language.name}</Text>
+                  {selectedLanguage.code === language.code && (
+                    <Icon name="check" size={20} color={colors.primary.main} />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </View>
+          </TouchableOpacity>
+        </Modal>
 
         {/* Categories Grid */}
         <View style={styles.categoriesContainer}>
@@ -109,23 +167,24 @@ const DashboardScreen = ({ userSkills = [], navigation }) => {
 
         {/* Government Schemes Button */}
         <View style={styles.additionalResourcesContainer}>
-          <TouchableOpacity 
-            style={styles.schemesButton}
-            onPress={() => navigation.navigate('schemes')}
-            activeOpacity={0.7}>
-            <View style={styles.schemesContent}>
-              <View style={styles.schemesIconContainer}>
-                <Icon name="bank" size={32} color="#7C3AED" />
+          <Link href="/(screens)/SchemesScreen" asChild>
+            <TouchableOpacity 
+              style={styles.schemesButton}
+              activeOpacity={0.7}>
+              <View style={styles.schemesContent}>
+                <View style={styles.schemesIconContainer}>
+                  <Icon name="bank" size={32} color="#7C3AED" />
+                </View>
+                <View style={styles.schemesTextContainer}>
+                  <Text style={styles.schemesTitle}>Government Schemes</Text>
+                  <Text style={styles.schemesDescription}>
+                    Access government schemes & benefits
+                  </Text>
+                </View>
               </View>
-              <View style={styles.schemesTextContainer}>
-                <Text style={styles.schemesTitle}>Government Schemes</Text>
-                <Text style={styles.schemesDescription}>
-                  Access government schemes & benefits
-                </Text>
-              </View>
-            </View>
-            <Icon name="chevron-right" size={24} color="#7C3AED" />
-          </TouchableOpacity>
+              <Icon name="chevron-right" size={24} color="#7C3AED" />
+            </TouchableOpacity>
+          </Link>
         </View>
       </ScrollView>
     </>
@@ -242,6 +301,69 @@ const styles = StyleSheet.create({
   schemesDescription: {
     fontSize: 14,
     color: '#7C3AED',
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  languageButton: {
+    backgroundColor: colors.primary.light,
+    padding: 4,
+    borderRadius: 6,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: semantic.text.primary,
+    textAlign: 'center',
+  },
+  languageOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 4,
+  },
+  selectedLanguage: {
+    backgroundColor: colors.primary.light + '20',
+  },
+  languageIcon: {
+    fontSize: 20,
+    marginRight: 12,
+  },
+  languageIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.primary.light + '30',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  languageIconText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary.main,
+  },
+  languageName: {
+    fontSize: 16,
+    color: semantic.text.primary,
+    flex: 1,
   },
 });
 

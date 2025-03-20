@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
+import { useRouter } from 'expo-router';
 
-const ProfileScreen = ({ navigation, toggleSaheliButton, showSaheliButton }) => {
+const ProfileScreen = ({ toggleSaheliButton, showSaheliButton }) => {
+  const router = useRouter();
   const userProfile = {
     name: "Sarah Johnson",
     email: "sarah.j@example.com",
@@ -23,27 +25,27 @@ const ProfileScreen = ({ navigation, toggleSaheliButton, showSaheliButton }) => 
     {
       title: 'Account Settings',
       icon: 'account-cog',
-      onPress: () => {}
+      onPress: () => router.push('/(screens)/settings')
     },
     {
       title: 'Privacy & Security',
       icon: 'shield-lock',
-      onPress: () => {}
+      onPress: () => router.push('/(screens)/privacy')
     },
     {
       title: 'Notifications',
       icon: 'bell',
-      onPress: () => {}
+      onPress: () => router.push('/(screens)/notifications')
     },
     {
       title: 'Help & Support',
       icon: 'help-circle',
-      onPress: () => {}
+      onPress: () => router.push('/(screens)/support')
     },
     {
       title: 'About',
       icon: 'information',
-      onPress: () => {}
+      onPress: () => router.push('/(screens)/about')
     }
   ];
 
@@ -53,7 +55,7 @@ const ProfileScreen = ({ navigation, toggleSaheliButton, showSaheliButton }) => 
       <View style={styles.header}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.goBack()}>
+          onPress={() => router.back()}>
           <Icon name="arrow-left" size={24} color={semantic.text.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
@@ -67,7 +69,9 @@ const ProfileScreen = ({ navigation, toggleSaheliButton, showSaheliButton }) => 
         />
         <Text style={styles.name}>{userProfile.name}</Text>
         <Text style={styles.email}>{userProfile.email}</Text>
-        <TouchableOpacity style={styles.editButton}>
+        <TouchableOpacity 
+          style={styles.editButton}
+          onPress={() => router.push('/(screens)/editProfile')}>
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
@@ -111,7 +115,9 @@ const ProfileScreen = ({ navigation, toggleSaheliButton, showSaheliButton }) => 
       </View>
 
       {/* Logout Button */}
-      <TouchableOpacity style={styles.logoutButton}>
+      <TouchableOpacity 
+        style={styles.logoutButton}
+        onPress={() => router.replace('/')}>
         <Icon name="logout" size={24} color="#DC2626" />
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>

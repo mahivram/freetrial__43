@@ -16,10 +16,12 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
 import VideoPlayer from '../components/VideoPlayer';
+import { Link, useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const FinancialEducationScreen = ({ navigation }) => {
+const FinancialEducationScreen = () => {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState('modules');
   const [showModuleModal, setShowModuleModal] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
@@ -602,8 +604,8 @@ const FinancialEducationScreen = ({ navigation }) => {
 
   const handleModulePress = (moduleId) => {
     setSelectedModule(moduleId);
-    setCurrentPage(1);
     setShowModuleModal(true);
+    setCurrentPage(1);
   };
 
   const handleVideoPress = (videoId) => {
@@ -839,25 +841,18 @@ const FinancialEducationScreen = ({ navigation }) => {
   };
 
   const renderHeader = () => (
-    <View style={styles.headerWrapper}>
-      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" translucent={false} />
-      <SafeAreaView style={styles.safeHeader}>
-        <View style={styles.header}>
-          <View style={styles.headerContent}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-              <Icon name="arrow-left" size={20} color={colors.primary.main} />
-            </TouchableOpacity>
-            <View style={styles.titleContainer}>
-              <Text style={styles.headerTitle}>Financial Education</Text>
-              <Text style={styles.headerSubtitle}>Learn and grow financially</Text>
-            </View>
-            <View style={styles.pointsContainer}>
-              <Icon name="star" size={20} color="#FFD700" />
-              <Text style={styles.pointsText}>{userPoints}</Text>
-            </View>
-          </View>
-        </View>
-      </SafeAreaView>
+    <View style={styles.header}>
+      <Link href="../" asChild>
+        <TouchableOpacity
+          style={styles.backButton}>
+          <Icon name="arrow-left" size={24} color={semantic.text.primary} />
+        </TouchableOpacity>
+      </Link>
+      <Text style={styles.headerTitle}>Financial Education</Text>
+      <View style={styles.pointsContainer}>
+        <Icon name="star" size={16} color={colors.primary.main} />
+        <Text style={styles.pointsText}>{userPoints} pts</Text>
+      </View>
     </View>
   );
 
@@ -1122,20 +1117,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8FAFC',
   },
-  headerWrapper: {
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
-  },
   header: {
     backgroundColor: '#FFFFFF',
     paddingVertical: 12,
-  },
-  headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 0, 0, 0.05)',
   },
   backButton: {
     width: 36,
@@ -1145,25 +1135,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
   headerTitle: {
     fontSize: 18,
     fontWeight: '700',
     color: '#1F2937',
   },
-  headerPlaceholder: {
-    width: 36,
+  pointsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: `${colors.primary.main}15`,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: `${colors.primary.main}30`,
   },
-  safeHeader: {
-    backgroundColor: '#FFFFFF',
-  },
-  headerSubtitle: {
+  pointsText: {
     fontSize: 14,
-    color: '#6B7280',
-    marginTop: 2,
+    fontWeight: '600',
+    color: colors.primary.main,
+    marginLeft: 6,
   },
   sectionTabsContainer: {
     flexDirection: 'row',
@@ -1360,43 +1351,69 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginLeft: 4,
   },
-  pointsContainer: {
+  modulesContainer: {
+    paddingHorizontal: 16,
+  },
+  moduleSubsection: {
+    marginBottom: 24,
+  },
+  subsectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    marginBottom: 12,
+    paddingLeft: 4,
   },
-  pointsText: {
+  subsectionTitle: {
     fontSize: 16,
     fontWeight: '600',
     color: '#1F2937',
-    marginLeft: 4,
+    marginLeft: 8,
   },
-  skillSection: {
-    marginBottom: 25,
+  moduleCardsContainer: {
+    paddingVertical: 4,
   },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 15,
+  moduleCard: {
+    width: 180,
+    padding: 16,
+    marginRight: 12,
+    borderRadius: 16,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
-  skillTitle: {
-    fontSize: 18,
+  moduleCardTitle: {
+    fontSize: 16,
     fontWeight: '600',
-    color: semantic.text.primary,
+    color: '#FFFFFF',
+    marginTop: 12,
+    marginBottom: 4,
   },
-  viewAllButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  moduleCardSubtitle: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.8)',
   },
-  viewAllText: {
-    fontSize: 14,
-    color: colors.primary.main,
-    marginRight: 4,
+  lockedModuleCard: {
+    // Remove opacity
+  },
+  completedModuleCard: {
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+  },
+  moduleCompletedBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 12,
+    padding: 4,
   },
   modalContainer: {
     flex: 1,
@@ -1488,75 +1505,6 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: '#9CA3AF',
-  },
-  modulesContainer: {
-    paddingHorizontal: 16,
-  },
-  moduleSubsection: {
-    marginBottom: 24,
-  },
-  subsectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    paddingLeft: 4,
-  },
-  subsectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginLeft: 8,
-  },
-  moduleCardsContainer: {
-    paddingVertical: 4,
-  },
-  moduleCard: {
-    width: 180,
-    padding: 16,
-    marginRight: 12,
-    borderRadius: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
-  moduleCardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginTop: 12,
-    marginBottom: 4,
-  },
-  moduleCardSubtitle: {
-    fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  lockedModuleCard: {
-    // Remove opacity
-  },
-  completedModuleCard: {
-    borderWidth: 2,
-    borderColor: '#FFFFFF',
-  },
-  moduleCompletedBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 12,
-    padding: 4,
-  },
-  modulePointsRequired: {
-    fontSize: 12,
-    color: '#DC2626',
-    marginLeft: 8,
   },
 });
 

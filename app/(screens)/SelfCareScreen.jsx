@@ -14,12 +14,14 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const SelfCareScreen = ({ navigation }) => {
+const SelfCareScreen = () => {
   const [expandedTopic, setExpandedTopic] = useState(null);
   const [expandedSubtopic, setExpandedSubtopic] = useState(null);
+  const router = useRouter();
 
   const healthTopics = [
     {
@@ -215,11 +217,7 @@ const SelfCareScreen = ({ navigation }) => {
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <TouchableOpacity
-              onPress={() => {
-                if (navigation.canGoBack()) {
-                  navigation.goBack();
-                }
-              }}
+              onPress={() => router.back()}
               style={styles.backButton}>
               <Icon name="arrow-left" size={20} color={colors.primary.main} />
             </TouchableOpacity>
@@ -238,7 +236,7 @@ const SelfCareScreen = ({ navigation }) => {
       style={[styles.resourceCard, { borderLeftColor: item.color }]}
       onPress={() => {
         if (item.link) {
-          navigation.navigate(item.link);
+          router.push(item.link);
         } else if (item.phone) {
           Linking.openURL(`tel:${item.phone}`);
         }

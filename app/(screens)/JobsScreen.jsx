@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic, shadows } from '../theme/colors';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 // Default skills to show all jobs if no skills are selected
 const DEFAULT_SKILLS = [
@@ -118,26 +119,39 @@ const JOB_INSIGHTS = [
   }
 ];
 
-const JobsScreen = ({ navigation, route }) => {
+const JobsScreen = () => {
   const [jobs, setJobs] = useState([]);
-  // Get selected skills from route params or use empty array
-  const userSkills = React.useMemo(() => route?.params?.selectedSkills || [], [route?.params?.selectedSkills]);
+  const router = useRouter();
+  const { selectedSkills = [] } = useLocalSearchParams();
+  
+  // Convert selectedSkills from string to array if needed
+  const userSkills = React.useMemo(() => 
+    typeof selectedSkills === 'string' ? [selectedSkills] : selectedSkills,
+    [selectedSkills]
+  );
 
-  useEffect(() => {
-    // If no skills are selected, show all jobs
-    const skillsToUse = userSkills.length > 0 ? userSkills : DEFAULT_SKILLS;
-    
-    // Filter jobs based on user skills or show all jobs if no skills
-    const filteredJobs = MOCK_JOBS.filter(job => 
+  // Memoize the skills to use
+  const skillsToUse = React.useMemo(() => 
+    userSkills.length > 0 ? userSkills : DEFAULT_SKILLS,
+    [userSkills]
+  );
+
+  // Memoize the filtered jobs
+  const filteredJobs = React.useMemo(() => 
+    MOCK_JOBS.filter(job => 
       job.requiredSkills.some(skill => skillsToUse.includes(skill))
-    );
-    setJobs(filteredJobs);
-  }, [userSkills]); // Only depend on userSkills
+    ),
+    [skillsToUse]
+  );
 
-  const getMatchingSkills = (jobSkills) => {
-    const skillsToUse = userSkills.length > 0 ? userSkills : DEFAULT_SKILLS;
+  // Update jobs state only when filtered jobs change
+  useEffect(() => {
+    setJobs(filteredJobs);
+  }, [filteredJobs]);
+
+  const getMatchingSkills = React.useCallback((jobSkills) => {
     return jobSkills.filter(skill => skillsToUse.includes(skill));
-  };
+  }, [skillsToUse]);
 
   const renderJobCard = (job) => {
     const matchingSkills = getMatchingSkills(job.requiredSkills);
@@ -146,7 +160,10 @@ const JobsScreen = ({ navigation, route }) => {
       <TouchableOpacity 
         key={job.id} 
         style={styles.jobCard}
-        onPress={() => navigation.navigate('JobDetails', { job })}>
+        onPress={() => router.push({
+          pathname: "/(screens)/JobDetails",
+          params: { job: JSON.stringify(job) }
+        })}>
         <View style={styles.jobHeader}>
           <View style={styles.companyLogo}>
             <Icon name="office-building" size={30} color="#666" />
@@ -224,7 +241,7 @@ const JobsScreen = ({ navigation, route }) => {
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton}
-          onPress={() => navigation.goBack()}>
+          onPress={() => router.back()}>
           <Icon name="arrow-left" size={24} color="#333" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Job Matches</Text>

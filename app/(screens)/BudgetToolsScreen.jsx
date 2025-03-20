@@ -16,10 +16,12 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors } from '../theme/colors';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
-const BudgetToolsScreen = ({ navigation }) => {
+const BudgetToolsScreen = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('income');
   const [showAddGoalModal, setShowAddGoalModal] = useState(false);
   const [newGoal, setNewGoal] = useState({
@@ -124,7 +126,9 @@ const BudgetToolsScreen = ({ navigation }) => {
       <SafeAreaView style={styles.safeHeader}>
         <View style={styles.header}>
           <View style={styles.headerContent}>
-            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <TouchableOpacity 
+              onPress={() => router.back()} 
+              style={styles.backButton}>
               <Icon name="arrow-left" size={20} color={colors.primary.main} />
             </TouchableOpacity>
             <View style={styles.titleContainer}>

@@ -10,9 +10,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
+import { useRouter } from 'expo-router';
 
-const SkillsScreen = ({ onComplete, onSkip }) => {
+const SkillsScreen = () => {
   const [selectedSkills, setSelectedSkills] = useState([]);
+  const router = useRouter();
 
   const skillCategories = [
     {
@@ -102,7 +104,10 @@ const SkillsScreen = ({ onComplete, onSkip }) => {
         .find((s) => s.id === skillId);
       return skill.name;
     });
-    onComplete(selectedSkillNames);
+    router.push({
+      pathname: "/(tabs)/home",
+      params: { selectedSkills: selectedSkillNames }
+    });
   };
 
   return (
@@ -112,6 +117,11 @@ const SkillsScreen = ({ onComplete, onSkip }) => {
         barStyle="dark-content"
       />
       <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}>
+          <Icon name="arrow-left" size={24} color="#333" />
+        </TouchableOpacity>
         <Icon name="star-circle" size={60} color={colors.primary.main} />
         <Text style={styles.title}>Select Your Skills</Text>
         <Text style={styles.subtitle}>
@@ -152,7 +162,9 @@ const SkillsScreen = ({ onComplete, onSkip }) => {
       </ScrollView>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.skipButton} onPress={onSkip}>
+        <TouchableOpacity 
+          style={styles.skipButton} 
+          onPress={() => router.push("/(tabs)/home")}>
           <Text style={styles.skipButtonText}>Skip for now</Text>
         </TouchableOpacity>
 
@@ -258,6 +270,12 @@ const styles = StyleSheet.create({
   },
   buttonIcon: {
     marginLeft: 10,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    padding: 10,
   },
 });
 
