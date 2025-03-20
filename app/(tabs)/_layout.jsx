@@ -12,7 +12,7 @@ const TabLayout = () => {
         tabBarActiveTintColor: colors.primary.main,
         tabBarInactiveTintColor: colors.gray[500],
         tabBarStyle: {
-          height: Platform.OS === "ios" ? 88 : 60,
+          height: Platform.OS === "ios" ? 80 : 60,
           paddingHorizontal: 16,
           paddingBottom: Platform.OS === "ios" ? 28 : 55,
           paddingTop: 8,
