@@ -12,9 +12,11 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, semantic } from '../theme/colors';
 import { useRouter } from 'expo-router';
+import { useAuth } from '../context/AuthContext';
 
 const ProfileScreen = ({ toggleSaheliButton, showSaheliButton }) => {
   const router = useRouter();
+  const { signOut } = useAuth();
   const userProfile = {
     name: "Sarah Johnson",
     email: "sarah.j@example.com",
@@ -117,7 +119,7 @@ const ProfileScreen = ({ toggleSaheliButton, showSaheliButton }) => {
       {/* Logout Button */}
       <TouchableOpacity 
         style={styles.logoutButton}
-        onPress={() => router.replace('/')}>
+        onPress={signOut}>
         <Icon name="logout" size={24} color="#DC2626" />
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>

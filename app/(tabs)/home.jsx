@@ -185,6 +185,26 @@ const DashboardScreen = ({ userSkills = [] }) => {
               <Icon name="chevron-right" size={24} color="#7C3AED" />
             </TouchableOpacity>
           </Link>
+
+          {/* AI Assistant Button */}
+          <Link href="/(screens)/AIAssistant" asChild>
+            <TouchableOpacity 
+              style={styles.aiButton}
+              activeOpacity={0.7}>
+              <View style={styles.aiContent}>
+                <View style={styles.aiIconContainer}>
+                  <Icon name="robot" size={32} color="#0284C7" />
+                </View>
+                <View style={styles.aiTextContainer}>
+                  <Text style={styles.aiTitle}>AI Assistant</Text>
+                  <Text style={styles.aiDescription}>
+                    Get personalized help and guidance
+                  </Text>
+                </View>
+              </View>
+              <Icon name="chevron-right" size={24} color="#0284C7" />
+            </TouchableOpacity>
+          </Link>
         </View>
       </ScrollView>
     </>
@@ -364,6 +384,45 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: semantic.text.primary,
     flex: 1,
+  },
+  aiButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F0F9FF',
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 12,
+   
+    borderColor: '#BAE6FD',
+  },
+  aiContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  aiIconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#E0F2FE',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+   
+    borderColor: '#7DD3FC',
+  },
+  aiTextContainer: {
+    flex: 1,
+  },
+  aiTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#0284C7',
+    marginBottom: 4,
+  },
+  aiDescription: {
+    fontSize: 14,
+    color: '#0EA5E9',
   },
 });
 

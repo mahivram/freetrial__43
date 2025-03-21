@@ -1,22 +1,8 @@
-import { useEffect } from "react";
 import { Redirect } from "expo-router";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { colors } from "./theme/colors";
+import { useAuth } from "./context/AuthContext";
 
 export default function Index() {
-  return <Redirect href="/(tabs)/home" />;
+  const { isAuthenticated } = useAuth();
+  
+  return <Redirect href={isAuthenticated ? "/(tabs)/home" : "/(auth)/AuthScreen"} />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: '#fff',
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: colors.primary.main,
-  },
-});
