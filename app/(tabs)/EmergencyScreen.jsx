@@ -9,15 +9,19 @@ import {
   Alert,
   Platform,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, shadows, semantic, components } from '../theme/colors';
+import axios from 'axios';
+import * as Location from 'expo-location';
 
 const EmergencyScreen = () => {
   const [expandedSection, setExpandedSection] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const emergencyContacts = [
-    { id: '1', name: 'Police', number: '100', icon: 'police-badge' },
+    { id: '1', name: 'Police', number: '+919638453973', icon: 'police-badge' },
     { id: '2', name: 'Ambulance', number: '102', icon: 'ambulance' },
     { id: '3', name: 'Fire', number: '101', icon: 'fire-truck' },
     { id: '4', name: 'National Emergency', number: '112', icon: 'alert-circle' },
@@ -139,6 +143,42 @@ const EmergencyScreen = () => {
     );
   };
 
+  const sendSos = async () => {
+    setLoading(true);
+
+    try {
+      // Get current location
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Allow location access to send SOS.");
+        setLoading(false);
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+
+      // Send SOS Alert to Backend
+      const response = await axios.post("http://localhost:3000/send-sos", {
+        phoneNumber: "+919638453973", // Using Police number as default
+        latitude,
+        longitude,
+      });
+
+      Alert.alert("✅ SOS Sent", response.data.message);
+
+      // Open Google Maps with location
+      const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+      await Linking.openURL(googleMapsUrl);
+
+    } catch (error) {
+      console.error(error);
+      Alert.alert("❌ Failed to send SOS", "Please try again or call emergency services directly.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar
@@ -154,10 +194,17 @@ const EmergencyScreen = () => {
       {/* SOS Button */}
       <TouchableOpacity
         style={styles.sosButton}
-        onPress={() => handleCall('112')}>
+        onPress={sendSos}
+        disabled={loading}>
         <View style={styles.sosInner}>
-          <Icon name="phone-alert" size={40} color="#FFFFFF" />
-          <Text style={styles.sosText}>SOS</Text>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FFFFFF" />
+          ) : (
+            <>
+              <Icon name="phone-alert" size={40} color="#FFFFFF" />
+              <Text style={styles.sosText}>SOS</Text>
+            </>
+          )}
         </View>
       </TouchableOpacity>
 

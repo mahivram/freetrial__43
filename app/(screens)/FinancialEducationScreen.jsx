@@ -20,6 +20,9 @@ import { Link, useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 
+// Add levels array at the top with other constants
+const levels = ['beginner', 'intermediate', 'advanced', 'expert'];
+
 const FinancialEducationScreen = () => {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState('modules');
@@ -41,12 +44,6 @@ const FinancialEducationScreen = () => {
     intermediate: 100,
     advanced: 250,
     expert: 500
-  };
-
-  // Points awarded for completing content
-  const pointsReward = {
-    video: 20,
-    module: 30
   };
 
   const educationModules = {
@@ -179,23 +176,23 @@ const FinancialEducationScreen = () => {
       pages: [
         {
           title: "What is an Emergency Fund?",
-          content: "An emergency fund is money you set aside specifically for unexpected expenses or financial emergencies. It acts as a financial safety net to help you avoid going into debt when unexpected costs arise. Think of it as your financial cushion for life's surprises like medical emergencies, car repairs, or job loss. Having this fund gives you peace of mind and financial security.",
+          content: "An emergency fund is money you set aside specifically for unexpected expenses or financial emergencies. It acts as a financial safety net to help you avoid going into debt when unexpected costs arise.\n\nKey Components:\n• Liquid savings readily available\n• Separate from regular savings\n• No investment risk\n• Easy to access\n\nPurpose:\n• Financial security\n• Peace of mind\n• Risk management\n• Debt prevention\n\nCommon Uses:\n• Medical emergencies\n• Job loss\n• Car repairs\n• Home repairs\n• Family emergencies",
         },
         {
           title: "Why Do You Need One?",
-          content: "Emergency funds provide financial security and reduce stress during unexpected situations. They help you: \n\n• Avoid high-interest debt and loans\n• Maintain financial stability during job transitions\n• Handle unexpected medical expenses\n• Cover urgent home or vehicle repairs\n• Deal with sudden family emergencies\n• Stay financially independent during crises",
+          content: "Emergency funds provide essential financial protection and reduce stress during unexpected situations.\n\nKey Benefits:\n\n1. Financial Security\n• Protection against job loss\n• Coverage for medical emergencies\n• Buffer for unexpected repairs\n• Prevention of debt accumulation\n\n2. Mental Well-being\n• Reduced financial stress\n• Better sleep and peace of mind\n• Improved decision-making\n• Greater confidence\n\n3. Financial Freedom\n• Flexibility in career choices\n• Ability to take calculated risks\n• Independence from credit\n• Better negotiating position\n\n4. Long-term Advantages\n• Better credit scores\n• Lower insurance costs\n• Improved investment decisions\n• Enhanced financial stability",
         },
         {
           title: "How Much Should You Save?",
-          content: "Most financial experts recommend saving 3-6 months of living expenses. Here's a breakdown:\n\n• Beginner: Start with ₹10,000\n• Intermediate: Build up to 3 months of expenses\n• Advanced: Aim for 6 months of expenses\n• Expert: Consider 12 months for added security\n\nCalculate your monthly expenses including:\n• Rent/Housing\n• Utilities\n• Food\n• Transportation\n• Insurance\n• Other essential bills",
+          content: "Your emergency fund size depends on your personal circumstances and financial obligations.\n\nRecommended Targets by Stage:\n\n1. Starter Emergency Fund\n• Goal: ₹10,000 - ₹25,000\n• Timeline: 3-6 months\n• Purpose: Handle small emergencies\n\n2. Basic Emergency Fund\n• Goal: 3 months of expenses\n• Calculation: Monthly expenses × 3\n• Coverage: Basic necessities\n\n3. Comprehensive Emergency Fund\n• Goal: 6 months of expenses\n• Additional buffers for dependents\n• Coverage: All living expenses\n\nExpense Categories to Consider:\n1. Essential Expenses\n• Housing (rent/mortgage)\n• Utilities\n• Food and groceries\n• Transportation\n• Insurance premiums\n• Healthcare\n\n2. Regular Bills\n• Phone and internet\n• Subscriptions\n• Minimum debt payments\n• Child care\n\n3. Variable Expenses\n• Maintenance costs\n• Seasonal expenses\n• Personal care\n• Basic entertainment",
         },
         {
           title: "Where to Keep It?",
-          content: "Your emergency fund should be easily accessible but separate from daily spending. Consider these options:\n\n1. High-yield savings account\n• Earns interest\n• Easy access\n• Separate from checking\n\n2. Money market account\n• Higher interest rates\n• Limited withdrawals\n• Minimum balance requirements\n\n3. Short-term fixed deposits\n• Better interest rates\n• Penalty-free early withdrawal options\n• Laddered maturity dates",
+          content: "Your emergency fund should balance accessibility with modest returns.\n\nBest Options:\n\n1. High-yield Savings Account\nAdvantages:\n• Immediate access\n• FDIC/DICGC insurance\n• Better interest rates\n• No market risk\n\nConsiderations:\n• Compare interest rates\n• Check account fees\n• Online vs. traditional banks\n• Minimum balance requirements\n\n2. Money Market Account\nBenefits:\n• Higher interest rates\n• Check writing capability\n• ATM access\n• Professional management\n\nLimitations:\n• Minimum balance rules\n• Transaction limits\n• Potential fees\n• Withdrawal restrictions\n\n3. Short-term Fixed Deposits\nAdvantages:\n• Better interest rates\n• Structured saving\n• Flexible tenures\n• Auto-renewal options\n\nStrategy:\n• Ladder multiple FDs\n• Stagger maturity dates\n• Keep some funds liquid\n• Balance accessibility",
         },
         {
           title: "Building Your Fund",
-          content: "Follow these steps to build your emergency fund:\n\n1. Set a monthly savings goal\n• Start with 10% of income\n• Increase gradually\n\n2. Automate your savings\n• Set up automatic transfers\n• Time them with paydays\n\n3. Find extra money\n• Cut unnecessary expenses\n• Use windfalls (bonuses, tax returns)\n• Side hustle income\n\n4. Track your progress\n• Use budgeting apps\n• Celebrate milestones\n• Adjust goals as needed",
+          content: "Create a systematic approach to build your emergency fund.\n\n1. Initial Steps\nAssess Current Situation:\n• Calculate monthly expenses\n• Review current savings\n• Identify saving opportunities\n• Set realistic goals\n\n2. Saving Strategies\nAutomate Savings:\n• Direct deposit splits\n• Automatic transfers\n• Round-up programs\n• Savings apps\n\nFind Extra Money:\n• Reduce expenses\n• Sell unused items\n• Side gigs\n• Overtime work\n• Tax refunds\n• Bonuses\n\n3. Accelerate Growth\nOptimize Income:\n• Ask for a raise\n• Develop skills\n• Freelance work\n• Part-time jobs\n\nReduce Expenses:\n• Cut unnecessary subscriptions\n• Negotiate bills\n• Energy efficiency\n• Smart shopping\n\n4. Maintain and Monitor\nRegular Review:\n• Track progress monthly\n• Adjust goals as needed\n• Rebalance allocations\n• Update for life changes\n\nProtect Your Fund:\n• Avoid temptation to spend\n• Replace used funds\n• Regular account monitoring\n• Maintain separate accounts",
         },
       ]
     },
@@ -229,49 +226,49 @@ const FinancialEducationScreen = () => {
       pages: [
         {
           title: "Understanding Stocks",
-          content: "Stocks represent ownership in a company. When you buy shares, you become a partial owner and can:\n\n• Participate in company growth\n• Earn dividends\n• Vote on company decisions\n• Sell shares for profit\n\nTypes of Stocks:\n• Common stocks\n• Preferred stocks\n• Growth stocks\n• Value stocks\n• Blue-chip stocks",
-        },
-        {
-          title: "How the Market Works",
-          content: "Stock markets are regulated exchanges where shares are traded. Key concepts:\n\n1. Market Participants\n• Investors\n• Brokers\n• Market makers\n• Regulators\n\n2. Price Determination\n• Supply and demand\n• Company performance\n• Market sentiment\n• Economic factors\n\n3. Trading Mechanisms\n• Order types\n• Trading sessions\n• Settlement process",
+          content: "Foundation concepts of stock market investing.\n\n1. What are Stocks?\nBasic Concepts:\n• Company ownership\n• Share types\n• Market value\n• Voting rights\n\nTypes of Stocks:\n• Common stocks\n• Preferred stocks\n• Growth stocks\n• Value stocks\n• Blue-chip stocks\n\n2. Stock Markets\nMarket Structure:\n• Stock exchanges\n• Trading hours\n• Market indices\n• Market makers\n\nParticipants:\n• Investors\n• Traders\n• Brokers\n• Regulators\n\n3. Stock Pricing\nPrice Factors:\n• Company performance\n• Market sentiment\n• Economic conditions\n• Industry trends\n\nValuation Metrics:\n• P/E ratio\n• EPS\n• Book value\n• Dividend yield",
         },
         {
           title: "Market Analysis",
-          content: "Two main approaches to analyze stocks:\n\n1. Fundamental Analysis\n• Company financials\n• Industry trends\n• Economic indicators\n• Management quality\n\n2. Technical Analysis\n• Price patterns\n• Trading volume\n• Market indicators\n• Chart analysis\n\nUse both methods for better decision-making.",
+          content: "Methods to analyze and evaluate stocks.\n\n1. Fundamental Analysis\nCompany Analysis:\n• Financial statements\n• Business model\n• Management team\n• Competitive position\n\nFinancial Metrics:\n• Revenue growth\n• Profit margins\n• Debt levels\n• Cash flow\n\n2. Technical Analysis\nPrice Patterns:\n• Trend lines\n• Support/resistance\n• Chart patterns\n• Volume analysis\n\nTechnical Indicators:\n• Moving averages\n• RSI\n• MACD\n• Bollinger Bands\n\n3. Market Research\nInformation Sources:\n• Company reports\n• Financial news\n• Analyst reports\n• Industry data\n\nResearch Process:\n• Data collection\n• Analysis methods\n• Documentation\n• Regular updates",
+        },
+        {
+          title: "Trading Basics",
+          content: "Essential knowledge for stock trading.\n\n1. Order Types\nBasic Orders:\n• Market orders\n• Limit orders\n• Stop orders\n• Stop-limit orders\n\nAdvanced Orders:\n• Good-till-cancelled\n• All-or-none\n• Fill-or-kill\n• Trailing stops\n\n2. Trading Process\nAccount Setup:\n• Choose broker\n• Account type\n• Funding methods\n• Trading platform\n\nExecution:\n• Place orders\n• Monitor positions\n• Track performance\n• Maintain records\n\n3. Trading Costs\nDirect Costs:\n• Brokerage fees\n• Transaction charges\n• Taxes\n• Platform fees\n\nIndirect Costs:\n• Spread costs\n• Slippage\n• Opportunity cost\n• Time value",
         },
         {
           title: "Risk Management",
-          content: "Protect your investments through:\n\n1. Diversification\n• Across sectors\n• Different company sizes\n• Geographic regions\n• Asset classes\n\n2. Risk Assessment\n• Market risk\n• Company risk\n• Industry risk\n• Economic risk\n\n3. Position Sizing\n• Portfolio allocation\n• Stop-loss orders\n• Regular rebalancing",
+          content: "Strategies to manage investment risks.\n\n1. Types of Risk\nMarket Risks:\n• Price volatility\n• Market cycles\n• Sector risks\n• Global events\n\nCompany Risks:\n• Business risk\n• Financial risk\n• Management risk\n• Operational risk\n\n2. Risk Mitigation\nDiversification:\n• Asset allocation\n• Sector spread\n• Geographic mix\n• Investment size\n\nProtective Strategies:\n• Stop losses\n• Position sizing\n• Portfolio rebalancing\n• Regular monitoring\n\n3. Portfolio Management\nConstruction:\n• Risk tolerance\n• Time horizon\n• Investment goals\n• Asset mix\n\nMaintenance:\n• Regular review\n• Rebalancing\n• Performance tracking\n• Strategy updates",
         },
         {
-          title: "Getting Started",
-          content: "Steps to begin stock market investing:\n\n1. Education\n• Read market news\n• Take online courses\n• Join investor groups\n\n2. Setup\n• Choose a broker\n• Open demat account\n• Link bank account\n\n3. Start Small\n• Begin with blue-chips\n• Use index funds\n• Regular investments\n\n4. Monitor & Learn\n• Track investments\n• Analyze mistakes\n• Keep learning",
-        },
+          title: "Advanced Concepts",
+          content: "Advanced stock market topics and strategies.\n\n1. Investment Strategies\nTrading Styles:\n• Day trading\n• Swing trading\n• Position trading\n• Value investing\n\nAdvanced Techniques:\n• Margin trading\n• Short selling\n• Options trading\n• Derivatives\n\n2. Market Psychology\nBehavioral Factors:\n• Fear and greed\n• Market sentiment\n• Crowd psychology\n• Decision biases\n\nEmotional Control:\n• Trading discipline\n• Risk management\n• Strategy adherence\n• Performance review\n\n3. Professional Tools\nAnalysis Tools:\n• Screening tools\n• Charting software\n• Research platforms\n• Portfolio trackers\n\nTrading Platforms:\n• Order execution\n• Real-time data\n• Analysis tools\n• Risk management",
+        }
       ]
     },
     mutualFunds: {
       title: "Mutual Funds",
       pages: [
         {
-          title: "Mutual Fund Basics",
-          content: "Mutual funds pool money from multiple investors to invest in diversified portfolios. Benefits include:\n\n• Professional management\n• Diversification\n• Liquidity\n• Convenience\n• Regulatory protection\n\nTypes:\n• Equity funds\n• Debt funds\n• Hybrid funds\n• Index funds\n• Sector funds",
+          title: "Understanding Mutual Funds",
+          content: "A comprehensive introduction to mutual funds and their role in investing.\n\n1. What are Mutual Funds?\nBasic Concept:\n• Pooled investment vehicle\n• Professional management\n• Diversified portfolio\n• Regulated structure\n\nKey Benefits:\n• Professional expertise\n• Risk diversification\n• Lower investment threshold\n• High liquidity\n• Transparency\n\n2. Types of Mutual Funds\nBy Investment Objective:\n• Growth funds\n• Income funds\n• Balanced funds\n• Tax-saving funds\n• Index funds\n\nBy Asset Class:\n• Equity funds\n• Debt funds\n• Hybrid funds\n• Money market funds\n• Commodity funds\n\n3. Fund Structure\nKey Components:\n• Asset Management Company\n• Trustees\n• Custodian\n• Transfer Agent\n• Unit holders",
         },
         {
-          title: "Types of Mutual Funds",
-          content: "Different funds for different goals:\n\n1. Equity Funds\n• Large-cap\n• Mid-cap\n• Small-cap\n• Sector-specific\n\n2. Debt Funds\n• Government securities\n• Corporate bonds\n• Money market\n\n3. Hybrid Funds\n• Balanced funds\n• Monthly income plans\n• Dynamic asset allocation",
+          title: "Investment Process",
+          content: "Step-by-step guide to investing in mutual funds.\n\n1. Account Setup\nRequired Documents:\n• PAN card\n• Address proof\n• Bank account\n• KYC verification\n• Demat account (optional)\n\nInvestment Modes:\n• Online platforms\n• Fund house directly\n• Financial advisors\n• Banking channels\n\n2. Investment Options\nSIP Benefits:\n• Rupee cost averaging\n• Disciplined investing\n• Lower market risk\n• Power of compounding\n\nLump Sum Benefits:\n• Market timing\n• Lower transaction costs\n• Immediate deployment\n• Better for large amounts\n\n3. Fund Selection\nResearch Process:\n• Investment objective\n• Fund category\n• Past performance\n• Fund manager track record\n• Expense ratio\n• Exit load",
+        },
+        {
+          title: "Risk and Returns",
+          content: "Understanding the risk-return relationship in mutual funds.\n\n1. Return Components\nTypes of Returns:\n• Capital appreciation\n• Dividend income\n• Interest income\n• Tax benefits\n\nPerformance Metrics:\n• Absolute returns\n• CAGR\n• Rolling returns\n• Risk-adjusted returns\n\n2. Risk Factors\nMarket Risks:\n• Equity market risk\n• Interest rate risk\n• Credit risk\n• Liquidity risk\n\nOperational Risks:\n• Fund manager risk\n• Concentration risk\n• Style drift\n• Regulatory risk\n\n3. Risk Management\nDiversification Strategies:\n• Asset allocation\n• Sector spread\n• Market cap distribution\n• Geographic diversification\n\nMonitoring Tools:\n• Performance tracking\n• Risk metrics\n• Portfolio analysis\n• Rebalancing triggers",
+        },
+        {
+          title: "Advanced Concepts",
+          content: "Deep dive into sophisticated mutual fund concepts.\n\n1. Portfolio Analysis\nKey Metrics:\n• Alpha and Beta\n• Sharpe ratio\n• Standard deviation\n• R-squared\n• Information ratio\n\nPortfolio Characteristics:\n• Market capitalization\n• P/E ratio\n• Dividend yield\n• Sector weights\n• Credit quality\n\n2. Tax Implications\nEquity Funds:\n• LTCG rules\n• STCG rates\n• Dividend taxation\n• Tax harvesting\n\nDebt Funds:\n• Indexation benefits\n• TDS rules\n• Capital gains\n• Tax efficiency\n\n3. Market Timing\nTiming Strategies:\n• Economic cycles\n• Market indicators\n• Valuation metrics\n• Momentum factors\n\nRebalancing:\n• Periodic review\n• Threshold-based\n• Risk-based\n• Goal-based",
         },
         {
           title: "Investment Strategies",
-          content: "Choose the right investment approach:\n\n1. Systematic Investment Plan (SIP)\n• Regular investments\n• Rupee cost averaging\n• Long-term wealth building\n\n2. Lump Sum Investment\n• Market timing\n• Large capital deployment\n• Strategic allocation\n\n3. Goal-based Investing\n• Education planning\n• Retirement planning\n• Tax saving",
-        },
-        {
-          title: "Fund Selection",
-          content: "Key factors in choosing funds:\n\n1. Performance Metrics\n• Returns history\n• Risk measures\n• Expense ratio\n• Fund size\n\n2. Fund Manager\n• Experience\n• Track record\n• Investment style\n\n3. Portfolio Fit\n• Investment objective\n• Risk tolerance\n• Time horizon\n• Tax efficiency",
-        },
-        {
-          title: "Monitoring & Rebalancing",
-          content: "Maintain your mutual fund portfolio:\n\n1. Regular Monitoring\n• Track performance\n• Compare benchmarks\n• Review fund changes\n\n2. Portfolio Rebalancing\n• Annual review\n• Asset allocation\n• Risk adjustment\n\n3. Exit Strategy\n• When to sell\n• Tax implications\n• Reinvestment plans",
-        },
+          content: "Advanced strategies for mutual fund investing.\n\n1. Core-Satellite Approach\nCore Portfolio:\n• Index funds\n• Large-cap funds\n• Balanced funds\n• Low-cost options\n\nSatellite Portfolio:\n• Sector funds\n• Mid/small-cap funds\n• International funds\n• Thematic funds\n\n2. Goal-Based Investing\nShort-term Goals:\n• Liquid funds\n• Ultra-short funds\n• Low-duration funds\n\nLong-term Goals:\n• Equity funds\n• Balanced funds\n• ELSS funds\n• Retirement funds\n\n3. Advanced Techniques\nDynamic Strategies:\n• Asset allocation funds\n• Multi-asset funds\n• Arbitrage funds\n• Fund of funds\n\nSpecialized Approaches:\n• Factor investing\n• Smart beta funds\n• Quant funds\n• ESG investing",
+        }
       ]
     },
     healthInsurance: {
@@ -303,25 +300,25 @@ const FinancialEducationScreen = () => {
       title: "Property Insurance",
       pages: [
         {
-          title: "Understanding Property Insurance",
-          content: "Property insurance protects your real estate investments. Coverage includes:\n\n1. Types of Properties\n• Residential homes\n• Commercial buildings\n• Rental properties\n• Under-construction\n\n2. Basic Coverage\n• Structure damage\n• Natural disasters\n• Fire protection\n• Theft coverage",
+          title: "Property Insurance Fundamentals",
+          content: "Essential concepts of property insurance protection.\n\n1. Coverage Types\nResidential Coverage:\n• Building structure\n• Contents coverage\n• Personal liability\n• Additional living expenses\n\nCommercial Coverage:\n• Building insurance\n• Business interruption\n• Equipment breakdown\n• Liability protection\n\n2. Policy Components\nBasic Elements:\n• Sum insured\n• Premium calculation\n• Policy period\n• Deductibles\n\nEndorsements:\n• Additional coverage\n• Policy modifications\n• Special conditions\n• Coverage extensions",
         },
         {
-          title: "Coverage Types",
-          content: "Different protection levels:\n\n1. Standard Coverage\n• Building structure\n• Interior fixtures\n• External structures\n• Basic contents\n\n2. Additional Protection\n• Valuable items\n• Temporary relocation\n• Liability coverage\n• Rent loss\n\n3. Natural Disasters\n• Flood insurance\n• Earthquake coverage\n• Storm protection\n• Lightning damage",
-        },
-        {
-          title: "Policy Selection",
-          content: "Choose the right coverage:\n\n1. Value Assessment\n• Property value\n• Contents worth\n• Replacement cost\n• Market value\n\n2. Risk Factors\n• Location risks\n• Construction type\n• Security measures\n• Usage pattern\n\n3. Cost Considerations\n• Premium rates\n• Deductibles\n• Payment options\n• Discounts available",
+          title: "Risk Assessment",
+          content: "Understanding and evaluating property risks.\n\n1. Property Valuation\nValuation Methods:\n• Market value\n• Replacement cost\n• Actual cash value\n• Agreed value\n\nFactors Considered:\n• Location\n• Construction type\n• Age of property\n• Safety features\n• Usage pattern\n\n2. Risk Factors\nNatural Risks:\n• Floods\n• Earthquakes\n• Storms\n• Lightning\n\nMan-made Risks:\n• Fire\n• Theft\n• Vandalism\n• Accidents\n\n3. Risk Mitigation\nSafety Measures:\n• Fire protection\n• Security systems\n• Building maintenance\n• Emergency planning\n\nDocumentation:\n• Property inventory\n• Maintenance records\n• Safety certificates\n• Inspection reports",
         },
         {
           title: "Claims Process",
-          content: "Handle property claims:\n\n1. Immediate Steps\n• Document damage\n• Emergency repairs\n• Police reports\n• Insurance notification\n\n2. Claim Filing\n• Damage assessment\n• Cost estimates\n• Required documents\n• Timeline compliance\n\n3. Settlement\n• Adjuster inspection\n• Repair quotes\n• Settlement negotiation\n• Payment process",
+          content: "Detailed guide to property insurance claims.\n\n1. Immediate Actions\nEmergency Response:\n• Safety measures\n• Damage control\n• Authority notification\n• Evidence collection\n\nClaim Initiation:\n• Insurance notification\n• Police report\n• Documentation\n• Preliminary assessment\n\n2. Documentation\nRequired Documents:\n• Claim forms\n• Damage photos\n• Repair estimates\n• Purchase receipts\n• Inventory list\n\nSupporting Evidence:\n• Witness statements\n• Expert reports\n• Maintenance records\n• Previous claims\n\n3. Settlement Process\nClaim Evaluation:\n• Adjuster inspection\n• Damage assessment\n• Coverage verification\n• Cost estimation\n\nSettlement Options:\n• Repair/replacement\n• Cash settlement\n• Partial settlement\n• Depreciation handling",
         },
         {
-          title: "Maintenance & Prevention",
-          content: "Protect your property:\n\n1. Regular Maintenance\n• Annual inspections\n• Safety upgrades\n• Security systems\n• Documentation\n\n2. Risk Mitigation\n• Fire safety\n• Water damage\n• Theft prevention\n• Weather protection\n\n3. Policy Updates\n• Coverage review\n• Value adjustments\n• New additions\n• Policy renewals",
+          title: "Policy Management",
+          content: "Effective management of property insurance policies.\n\n1. Policy Review\nAnnual Assessment:\n• Coverage adequacy\n• Premium review\n• Policy updates\n• Risk changes\n\nCoverage Updates:\n• Property improvements\n• Value changes\n• Usage modifications\n• New acquisitions\n\n2. Cost Management\nPremium Reduction:\n• Safety discounts\n• Multi-policy discounts\n• Claims-free bonus\n• Higher deductibles\n\nCost Optimization:\n• Coverage comparison\n• Market research\n• Bundle options\n• Payment plans\n\n3. Compliance\nRegulatory Requirements:\n• Mandatory coverage\n• Documentation\n• Reporting\n• Renewals\n\nBest Practices:\n• Regular updates\n• Record keeping\n• Policy review\n• Risk assessment",
         },
+        {
+          title: "Special Considerations",
+          content: "Advanced topics in property insurance.\n\n1. Special Properties\nUnique Coverage:\n• Heritage buildings\n• Vacation homes\n• Investment properties\n• Under-construction\n\nSpecial Risks:\n• Coastal properties\n• Mountain locations\n• Remote areas\n• High-value assets\n\n2. Business Properties\nCommercial Aspects:\n• Business interruption\n• Stock insurance\n• Machinery breakdown\n• Public liability\n\nRisk Management:\n• Employee training\n• Safety protocols\n• Emergency response\n• Business continuity\n\n3. Future Trends\nEmerging Risks:\n• Climate change\n• Cyber threats\n• Technology impact\n• Regulatory changes\n\nInnovations:\n• Smart monitoring\n• Digital claims\n• Risk analytics\n• Parametric insurance",
+        }
       ]
     },
     budgeting: {
@@ -329,23 +326,23 @@ const FinancialEducationScreen = () => {
       pages: [
         {
           title: "Budgeting Basics",
-          content: "A budget is your financial roadmap. Key elements:\n\n1. Income Tracking\n• Regular salary\n• Additional income\n• Investment returns\n• Other sources\n\n2. Expense Categories\n• Essential needs\n• Lifestyle choices\n• Savings goals\n• Debt payments\n\n3. Budget Types\n• Zero-based budget\n• Envelope system\n• 50/30/20 rule\n• Percentage-based",
+          content: "A budget is your financial roadmap that helps you manage money effectively.\n\n1. Income Sources\nPrimary Income:\n• Salary/wages\n• Business income\n• Freelance earnings\n• Commission/bonuses\n\nSecondary Income:\n• Investments\n• Rental income\n• Side hustles\n• Passive income\n\n2. Expense Categories\nFixed Expenses:\n• Rent/mortgage\n• Loan payments\n• Insurance\n• Utilities\n\nVariable Expenses:\n• Groceries\n• Transportation\n• Entertainment\n• Shopping\n\n3. Budget Types\nZero-based Budget:\n• Every rupee has a purpose\n• Complete allocation\n• Detailed tracking\n• Regular adjustments\n\n50/30/20 Rule:\n• 50% needs\n• 30% wants\n• 20% savings\n\nEnvelope System:\n• Cash allocation\n• Category limits\n• Visual management\n• Spending control",
         },
         {
-          title: "Creating a Budget",
-          content: "Step-by-step budget creation:\n\n1. Income Assessment\n• List all income sources\n• Calculate total monthly income\n• Account for variations\n\n2. Expense Tracking\n• Fixed expenses\n• Variable costs\n• Periodic expenses\n• Discretionary spending\n\n3. Goal Setting\n• Short-term needs\n• Long-term planning\n• Emergency fund\n• Debt reduction",
+          title: "Creating Your Budget",
+          content: "Follow these steps to create an effective budget:\n\n1. Income Assessment\nCalculate Total Income:\n• List all income sources\n• Average variable income\n• Account for taxes\n• Consider timing\n\nIncome Stability:\n• Regular vs irregular\n• Seasonal variations\n• Growth potential\n• Risk factors\n\n2. Expense Tracking\nFixed Expenses:\n• Housing costs\n• Utilities\n• Insurance\n• Loan payments\n• Subscriptions\n\nVariable Expenses:\n• Food and dining\n• Transportation\n• Healthcare\n• Entertainment\n• Shopping\n\nPeriodic Expenses:\n• Annual payments\n• Seasonal costs\n• Maintenance\n• Special occasions\n\n3. Goal Setting\nShort-term Goals:\n• Emergency fund\n• Debt reduction\n• Specific purchases\n• Travel plans\n\nLong-term Goals:\n• Retirement savings\n• Education funds\n• Home ownership\n• Investment growth",
         },
         {
-          title: "50/30/20 Rule",
-          content: "Budget allocation guide:\n\n1. 50% Needs (₹)\n• Housing\n• Utilities\n• Food\n• Transportation\n• Insurance\n\n2. 30% Wants (₹)\n• Entertainment\n• Dining out\n• Shopping\n• Hobbies\n\n3. 20% Savings (₹)\n• Emergency fund\n• Retirement\n• Investments\n• Debt repayment",
+          title: "Digital Tools & Apps",
+          content: "Leverage technology for better budget management:\n\n1. Budgeting Apps\nFeatures to Look For:\n• Expense tracking\n• Bill reminders\n• Category management\n• Goal tracking\n• Reports and analytics\n\nPopular Options:\n• Money Manager\n• Wallet\n• Spendee\n• ET Money\n• PhonePe\n\n2. Spreadsheet Templates\nComponents:\n• Income tracker\n• Expense categories\n• Savings goals\n• Debt payoff plans\n• Investment tracking\n\nAdvanced Features:\n• Automatic calculations\n• Visual charts\n• Forecast models\n• Budget vs. actual\n\n3. Banking Apps\nKey Functions:\n• Balance checking\n• Transaction history\n• Bill payments\n• Fund transfers\n• Savings tools\n\nSmart Features:\n• Category tagging\n• Spending alerts\n• Budget warnings\n• Savings suggestions",
         },
         {
-          title: "Tracking Systems",
-          content: "Methods to monitor spending:\n\n1. Digital Tools\n• Budgeting apps\n• Spreadsheets\n• Banking apps\n• Expense trackers\n\n2. Manual Systems\n• Receipt collection\n• Expense diary\n• Budget journal\n• Cash envelopes\n\n3. Regular Review\n• Daily tracking\n• Weekly summaries\n• Monthly analysis\n• Quarterly planning",
+          title: "Common Challenges",
+          content: "Overcome typical budgeting obstacles:\n\n1. Irregular Income\nStrategies:\n• Base budget on minimum income\n• Create buffer fund\n• Prioritize expenses\n• Flexible allocations\n\nContingency Planning:\n• Emergency fund\n• Multiple income streams\n• Expense flexibility\n• Savings buffer\n\n2. Unexpected Expenses\nPreparation:\n• Emergency fund\n• Insurance coverage\n• Regular maintenance\n• Budget buffers\n\nResponse Plan:\n• Prioritize payments\n• Adjust categories\n• Find extra income\n• Review coverage\n\n3. Overspending\nPrevention:\n• Track all expenses\n• Use cash envelopes\n• Wait before buying\n• Find alternatives\n\nRecovery Steps:\n• Identify triggers\n• Create limits\n• Find substitutes\n• Build new habits",
         },
         {
           title: "Budget Maintenance",
-          content: "Keep your budget effective:\n\n1. Regular Updates\n• Income changes\n• New expenses\n• Goal progress\n• Priority shifts\n\n2. Problem Solving\n• Overspending fixes\n• Savings strategies\n• Debt management\n• Emergency handling\n\n3. Long-term Success\n• Habit formation\n• Lifestyle alignment\n• Financial education\n• Support system",
+          content: "Keep your budget effective and current:\n\n1. Regular Reviews\nWeekly Tasks:\n• Track expenses\n• Check balances\n• Update records\n• Flag issues\n\nMonthly Reviews:\n• Compare to plan\n• Adjust categories\n• Check progress\n• Plan ahead\n\n2. Adjustments\nWhen to Adjust:\n• Income changes\n• Life events\n• New goals\n• Market changes\n\nHow to Adjust:\n• Review priorities\n• Reallocate funds\n• Update goals\n• Modify habits\n\n3. Long-term Success\nHabit Formation:\n• Start small\n• Be consistent\n• Track progress\n• Celebrate wins\n\nContinuous Improvement:\n• Learn from mistakes\n• Seek knowledge\n• Update skills\n• Share experiences\n\n4. Support System\nTools and Resources:\n• Financial advisor\n• Budget apps\n• Education\n• Community\n\nAccountability:\n• Share goals\n• Regular check-ins\n• Progress tracking\n• Support network",
         },
       ]
     },
@@ -353,25 +350,25 @@ const FinancialEducationScreen = () => {
       title: "Credit Cards",
       pages: [
         {
-          title: "Credit Card Basics",
-          content: "Understanding credit cards:\n\n1. How They Work\n• Credit limit\n• Billing cycle\n• Grace period\n• Interest charges\n\n2. Types of Cards\n• Rewards cards\n• Cashback cards\n• Travel cards\n• Secured cards\n\n3. Key Terms\n• APR\n• Annual fees\n• Credit score impact\n• Minimum payments",
+          title: "Credit Card Fundamentals",
+          content: "Understanding the basics of credit cards and how they work.\n\n1. Core Concepts\nWhat is a Credit Card:\n• Revolving credit line\n• Payment flexibility\n• Digital transactions\n• Purchase protection\n\nKey Components:\n• Credit limit\n• Interest rates (APR)\n• Grace period\n• Minimum payments\n• Statement cycle\n\n2. Types of Cards\nRewards Cards:\n• Cashback benefits\n• Travel rewards\n• Shopping points\n• Lifestyle perks\n\nSpecialty Cards:\n• Business cards\n• Student cards\n• Secured cards\n• Co-branded cards\n\n3. Important Terms\nFees and Charges:\n• Annual fees\n• Late payment fees\n• Foreign transaction fees\n• Cash advance charges\n\nInterest Calculations:\n• Daily periodic rate\n• Balance computation\n• Compound interest\n• Promotional rates",
         },
         {
           title: "Smart Usage Guidelines",
-          content: "Use credit cards responsibly:\n\n1. Best Practices\n• Pay full balance\n• Stay under limit\n• Track spending\n• Monitor statements\n\n2. Security Measures\n• PIN protection\n• Online safety\n• Fraud monitoring\n• Lost card procedure\n\n3. Avoid Pitfalls\n• Minimum payments trap\n• Late payment fees\n• Cash advances\n• Impulse spending",
+          content: "Best practices for responsible credit card use.\n\n1. Payment Management\nPayment Strategies:\n• Pay full balance\n• Before due date\n• Automatic payments\n• Payment reminders\n\nAvoiding Interest:\n• Understanding grace period\n• Tracking due dates\n• Balance monitoring\n• Early payments\n\n2. Security Measures\nPhysical Security:\n• Safe storage\n• Regular checks\n• Immediate reporting\n• Card activation\n\nDigital Security:\n• Strong passwords\n• Secure websites\n• Regular monitoring\n• Fraud alerts\n\n3. Common Pitfalls\nAvoid These Mistakes:\n• Minimum payments trap\n• Cash advances\n• Missing payments\n• Over-limit charges\n\nSpending Control:\n• Budget alignment\n• Impulse control\n• Emergency only\n• Regular review",
         },
         {
           title: "Maximizing Benefits",
-          content: "Get the most from your cards:\n\n1. Rewards Programs\n• Points systems\n• Cashback options\n• Travel miles\n• Shopping discounts\n\n2. Additional Benefits\n• Insurance coverage\n• Purchase protection\n• Extended warranty\n• Concierge services\n\n3. Strategic Usage\n• Category bonuses\n• Sign-up bonuses\n• Special offers\n• Partner programs",
+          content: "Get the most value from your credit cards.\n\n1. Rewards Programs\nTypes of Rewards:\n• Cashback programs\n• Travel miles\n• Shopping points\n• Hotel points\n\nOptimization Strategies:\n• Category bonuses\n• Seasonal promotions\n• Sign-up bonuses\n• Redemption timing\n\n2. Additional Benefits\nInsurance Coverage:\n• Purchase protection\n• Travel insurance\n• Rental car coverage\n• Extended warranty\n\nLifestyle Benefits:\n• Airport lounge access\n• Concierge services\n• Entertainment access\n• Shopping discounts\n\n3. Strategic Usage\nMaximize Value:\n• Right card for spending\n• Bonus categories\n• Stack rewards\n• Time purchases\n\nBenefit Tracking:\n• Monitor rewards\n• Track expiration\n• Compare benefits\n• Evaluate usage",
         },
         {
-          title: "Managing Multiple Cards",
-          content: "Handle multiple credit cards:\n\n1. Organization\n• Payment tracking\n• Usage strategy\n• Record keeping\n• Credit utilization\n\n2. Selection Strategy\n• Primary card\n• Backup cards\n• Specific purpose cards\n• Emergency cards\n\n3. Regular Review\n• Benefits comparison\n• Fee assessment\n• Usage patterns\n• Cancellation criteria",
+          title: "Credit Building",
+          content: "Use credit cards to build a strong credit profile.\n\n1. Credit Score Impact\nPositive Factors:\n• Payment history\n• Credit utilization\n• Account age\n• Credit mix\n\nScore Components:\n• Payment record (35%)\n• Utilization (30%)\n• History length (15%)\n• New credit (10%)\n• Credit mix (10%)\n\n2. Building Strategy\nEstablish Credit:\n• Start with secured card\n• Become authorized user\n• Regular small charges\n• Consistent payments\n\nMaintain Good Standing:\n• Low utilization\n• On-time payments\n• Active accounts\n• Regular monitoring\n\n3. Recovery Plans\nCredit Repair:\n• Identify issues\n• Contact creditors\n• Setup payments\n• Monitor progress\n\nPrevention:\n• Set spending limits\n• Payment reminders\n• Regular checks\n• Emergency fund",
         },
         {
-          title: "Building Credit",
-          content: "Use cards to build credit:\n\n1. Credit Score Factors\n• Payment history\n• Credit utilization\n• Account age\n• Mix of credit\n\n2. Improvement Strategy\n• Timely payments\n• Low balances\n• Long-term accounts\n• Regular monitoring\n\n3. Problem Resolution\n• Dispute process\n• Credit repair\n• Debt management\n• Professional help",
-        },
+          title: "Advanced Management",
+          content: "Advanced strategies for credit card management.\n\n1. Multiple Card Strategy\nCard Portfolio:\n• Primary card\n• Backup cards\n• Specialty cards\n• Emergency cards\n\nOptimization:\n• Rotate cards\n• Match benefits\n• Track expenses\n• Review strategy\n\n2. Debt Management\nDebt Prevention:\n• Spending limits\n• Budget alignment\n• Emergency fund\n• Regular review\n\nDebt Resolution:\n• Balance transfer\n• Debt consolidation\n• Payment planning\n• Professional help\n\n3. Annual Review\nCard Assessment:\n• Fee evaluation\n• Benefit usage\n• Reward value\n• Needs alignment\n\nOptimization Steps:\n• Upgrade options\n• Downgrade choices\n• Cancel unused\n• New applications",
+        }
       ]
     },
     womenEmpowerment: {
@@ -446,6 +443,31 @@ const FinancialEducationScreen = () => {
         {
           title: "Advanced Strategies",
           content: "Taking it to next level:\n\n1. Portfolio Expansion\n• International markets\n• Alternative investments\n• Tax-efficient strategies\n\n2. Wealth Building\n• Compound growth\n• Dividend reinvestment\n• Portfolio optimization\n\n3. Future Planning\n• Estate planning\n• Inheritance management\n• Charitable giving",
+        }
+      ]
+    },
+    womenFinancialIndependence: {
+      title: "Financial Independence for Women",
+      pages: [
+        {
+          title: "Foundation of Financial Independence",
+          content: "Essential steps towards financial independence.\n\n1. Financial Awareness\nBasic Concepts:\n• Income management\n• Expense tracking\n• Savings discipline\n• Investment basics\n\nFinancial Literacy:\n• Banking knowledge\n• Digital transactions\n• Financial terms\n• Market understanding\n\n2. Independent Banking\nAccount Management:\n• Savings account\n• Fixed deposits\n• Credit cards\n• Online banking\n\nSecurity Measures:\n• Digital safety\n• Fraud prevention\n• Account monitoring\n• Emergency access\n\n3. Career Planning\nProfessional Growth:\n• Skill development\n• Career progression\n• Income growth\n• Work-life balance\n\nEntrepreneurship:\n• Business planning\n• Market research\n• Funding options\n• Risk management",
+        },
+        {
+          title: "Investment Planning",
+          content: "Building wealth through smart investments.\n\n1. Investment Basics\nInvestment Options:\n• Fixed deposits\n• Mutual funds\n• Stocks\n• Gold\n• Real estate\n\nRisk Management:\n• Risk assessment\n• Portfolio diversification\n• Regular monitoring\n• Rebalancing\n\n2. Goal-Based Investing\nShort-term Goals:\n• Emergency fund\n• Major purchases\n• Travel plans\n• Skill development\n\nLong-term Goals:\n• Retirement planning\n• Children's education\n• Property purchase\n• Wealth creation\n\n3. Tax Planning\nTax Efficiency:\n• Tax-saving investments\n• Deductions available\n• Tax filing\n• Documentation\n\nWealth Protection:\n• Insurance needs\n• Estate planning\n• Will creation\n• Nominee declaration",
+        },
+        {
+          title: "Financial Security",
+          content: "Building and maintaining financial security.\n\n1. Emergency Planning\nEmergency Fund:\n• Fund size\n• Easy access\n• Regular review\n• Replenishment\n\nInsurance Coverage:\n• Health insurance\n• Life insurance\n• Critical illness\n• Personal accident\n\n2. Debt Management\nCredit Usage:\n• Credit score\n• Loan management\n• Debt reduction\n• Interest optimization\n\nFinancial Discipline:\n• Budgeting\n• Expense control\n• Savings automation\n• Credit monitoring\n\n3. Retirement Planning\nRetirement Corpus:\n• Corpus calculation\n• Investment strategy\n• Regular contributions\n• Portfolio review\n\nIncome Sources:\n• Pension plans\n• Rental income\n• Investment returns\n• Business income",
+        },
+        {
+          title: "Legal & Documentation",
+          content: "Important legal aspects of financial independence.\n\n1. Essential Documents\nPersonal Documents:\n• Identity proof\n• Address proof\n• PAN card\n• Bank documents\n\nLegal Papers:\n• Property papers\n• Insurance policies\n• Investment certificates\n• Will document\n\n2. Rights & Protection\nLegal Rights:\n• Property rights\n• Inheritance laws\n• Marriage laws\n• Divorce rights\n\nFinancial Protection:\n• Joint accounts\n• Nominations\n• Power of attorney\n• Legal consultation\n\n3. Digital Security\nOnline Safety:\n• Password protection\n• Two-factor authentication\n• Regular monitoring\n• Fraud prevention\n\nRecord Keeping:\n• Digital copies\n• Cloud storage\n• Regular updates\n• Access management",
+        },
+        {
+          title: "Future Planning",
+          content: "Long-term financial planning and growth.\n\n1. Wealth Creation\nInvestment Growth:\n• Portfolio expansion\n• Risk adjustment\n• Regular review\n• Market monitoring\n\nAlternative Income:\n• Business ventures\n• Passive income\n• Skill monetization\n• Investment returns\n\n2. Knowledge Enhancement\nFinancial Education:\n• Market understanding\n• Investment knowledge\n• Tax planning\n• Estate planning\n\nNetworking:\n• Professional groups\n• Financial advisors\n• Mentorship\n• Support system\n\n3. Legacy Planning\nWealth Transfer:\n• Estate planning\n• Will creation\n• Trust formation\n• Tax efficiency\n\nFamily Education:\n• Financial literacy\n• Money management\n• Investment basics\n• Risk awareness",
         }
       ]
     }
@@ -615,44 +637,47 @@ const FinancialEducationScreen = () => {
 
   // Check if a level is unlocked
   const isLevelUnlocked = (level) => {
-    return unlockedLevels.includes(level);
+    if (level === 'beginner') return true;
+    
+    const levels = ['beginner', 'intermediate', 'advanced', 'expert'];
+    const levelIndex = levels.indexOf(level);
+    const previousLevel = levels[levelIndex - 1];
+    
+    // Check both points requirement and previous level test score
+    const hasEnoughPoints = userPoints >= levelRequirements[level];
+    const passedPreviousTest = testScores[previousLevel] >= testThresholds[previousLevel];
+    
+    return hasEnoughPoints && passedPreviousTest;
   };
 
   // Handle video completion
   const handleVideoCompletion = (videoId) => {
     if (!completedVideos.includes(videoId)) {
-      const newPoints = userPoints + pointsReward.video;
-      setUserPoints(newPoints);
       setCompletedVideos([...completedVideos, videoId]);
-      
-      // Check if new level should be unlocked
-      checkLevelUnlock(newPoints);
     }
   };
 
   // Handle module completion
   const handleModuleCompletion = (moduleId) => {
     if (!completedModules.includes(moduleId)) {
-      const newPoints = userPoints + pointsReward.module;
-      setUserPoints(newPoints);
       setCompletedModules([...completedModules, moduleId]);
-      
-      // Check if new level should be unlocked
-      checkLevelUnlock(newPoints);
     }
   };
 
   // Check if new level should be unlocked
   const checkLevelUnlock = (points) => {
-    const newUnlockedLevels = [...unlockedLevels];
+    const newUnlockedLevels = ['beginner'];
     
-    if (points >= levelRequirements.intermediate && !newUnlockedLevels.includes('intermediate')) {
+    if (points >= levelRequirements.intermediate && 
+        testScores.beginner >= testThresholds.beginner) {
       newUnlockedLevels.push('intermediate');
     }
-    if (points >= levelRequirements.advanced && !newUnlockedLevels.includes('advanced')) {
+    if (points >= levelRequirements.advanced && 
+        testScores.intermediate >= testThresholds.intermediate) {
       newUnlockedLevels.push('advanced');
     }
-    if (points >= levelRequirements.expert && !newUnlockedLevels.includes('expert')) {
+    if (points >= levelRequirements.expert && 
+        testScores.advanced >= testThresholds.advanced) {
       newUnlockedLevels.push('expert');
     }
     
@@ -813,7 +838,6 @@ const FinancialEducationScreen = () => {
         />
         <View style={styles.playButton}>
           <Icon name={isCompleted ? "check-circle" : "play-circle"} size={40} color="#fff" />
-          
         </View>
         <View style={styles.tutorialInfo}>
           <Text style={styles.tutorialTitle} numberOfLines={2}>
@@ -869,6 +893,12 @@ const FinancialEducationScreen = () => {
         onPress={() => setActiveSection('videos')}>
         <Icon name="play-circle" size={24} color={activeSection === 'videos' ? colors.primary.main : '#6B7280'} />
         <Text style={[styles.sectionTabText, activeSection === 'videos' && styles.activeSectionTabText]}>Lecture</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.sectionTab, activeSection === 'tests' && styles.activeSectionTab]}
+        onPress={() => setActiveSection('tests')}>
+        <Icon name="pencil" size={24} color={activeSection === 'tests' ? colors.primary.main : '#6B7280'} />
+        <Text style={[styles.sectionTabText, activeSection === 'tests' && styles.activeSectionTabText]}>Tests</Text>
       </TouchableOpacity>
     </View>
   );
@@ -1086,6 +1116,480 @@ const FinancialEducationScreen = () => {
     </View>
   );
 
+  // Add test content for each level
+  const testContent = {
+    beginner: {
+      title: "Beginner Level Test",
+      questions: [
+        {
+          id: 1,
+          question: "What is the primary purpose of an emergency fund?",
+          options: [
+            "To invest in stocks",
+            "To handle unexpected expenses and financial emergencies",
+            "To save for vacation",
+            "To buy luxury items"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 2,
+          question: "Which of the following is a key component of budgeting?",
+          options: [
+            "Spending all your income",
+            "Ignoring small expenses",
+            "Tracking income and expenses",
+            "Avoiding savings"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 3,
+          question: "What is the recommended size for a starter emergency fund?",
+          options: [
+            "₹1,000",
+            "₹5,000",
+            "₹10,000 - ₹25,000",
+            "₹1,00,000"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 4,
+          question: "What is the 50/30/20 rule in budgeting?",
+          options: [
+            "50% savings, 30% needs, 20% wants",
+            "50% needs, 30% wants, 20% savings",
+            "50% wants, 30% savings, 20% needs",
+            "50% investments, 30% savings, 20% expenses"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 5,
+          question: "Which is the best place to keep your emergency fund?",
+          options: [
+            "Stock market",
+            "High-yield savings account",
+            "Under your mattress",
+            "Cryptocurrency"
+          ],
+          correctAnswer: 1
+        }
+      ]
+    },
+    intermediate: {
+      title: "Intermediate Level Test",
+      questions: [
+        {
+          id: 1,
+          question: "What is a mutual fund?",
+          options: [
+            "A type of bank account",
+            "A pooled investment vehicle managed professionally",
+            "A government bond",
+            "A type of insurance"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 2,
+          question: "What is the benefit of SIP (Systematic Investment Plan)?",
+          options: [
+            "Guaranteed returns",
+            "No market risk",
+            "Rupee cost averaging",
+            "Instant profits"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 3,
+          question: "Which factor affects your credit score the most?",
+          options: [
+            "Number of credit cards",
+            "Payment history",
+            "Credit utilization",
+            "Credit mix"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 4,
+          question: "What is diversification in investing?",
+          options: [
+            "Investing all money in one stock",
+            "Spreading investments across different assets",
+            "Only investing in gold",
+            "Keeping all money in savings"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 5,
+          question: "What is the purpose of asset allocation?",
+          options: [
+            "To maximize risk",
+            "To balance risk and return",
+            "To eliminate all returns",
+            "To avoid investing"
+          ],
+          correctAnswer: 1
+        }
+      ]
+    },
+    advanced: {
+      title: "Advanced Level Test",
+      questions: [
+        {
+          id: 1,
+          question: "What is the Sharpe ratio used for?",
+          options: [
+            "Measuring fund manager performance",
+            "Calculating dividend yield",
+            "Measuring risk-adjusted returns",
+            "Determining market cap"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 2,
+          question: "What is a stop-loss order?",
+          options: [
+            "An order to buy at market price",
+            "An order to sell if price falls below specified level",
+            "An order to buy more shares",
+            "An order to hold shares"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 3,
+          question: "What is technical analysis in stock trading?",
+          options: [
+            "Analyzing company financials",
+            "Studying price patterns and trends",
+            "Reading news articles",
+            "Calculating dividends"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 4,
+          question: "What is the core-satellite approach in portfolio management?",
+          options: [
+            "Only investing in index funds",
+            "Only investing in active funds",
+            "Combining index funds with active investments",
+            "Avoiding diversification"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 5,
+          question: "What is the purpose of portfolio rebalancing?",
+          options: [
+            "To increase risk",
+            "To maintain target asset allocation",
+            "To eliminate dividends",
+            "To avoid taxes"
+          ],
+          correctAnswer: 1
+        }
+      ]
+    },
+    expert: {
+      title: "Expert Level Test",
+      questions: [
+        {
+          id: 1,
+          question: "What is factor investing?",
+          options: [
+            "Random stock selection",
+            "Investing based on specific characteristics",
+            "Day trading strategy",
+            "Avoiding stocks"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 2,
+          question: "What is the purpose of parametric insurance?",
+          options: [
+            "Traditional claims process",
+            "Automatic payout based on triggered events",
+            "No insurance coverage",
+            "Only life insurance"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 3,
+          question: "What is ESG investing?",
+          options: [
+            "Only environmental investing",
+            "Investment based on environmental, social, and governance factors",
+            "High-risk trading",
+            "Short-term trading"
+          ],
+          correctAnswer: 1
+        },
+        {
+          id: 4,
+          question: "What is a smart beta fund?",
+          options: [
+            "Pure index fund",
+            "Active management only",
+            "Combination of passive and factor investing",
+            "Avoiding stocks"
+          ],
+          correctAnswer: 2
+        },
+        {
+          id: 5,
+          question: "What is the purpose of a trust in estate planning?",
+          options: [
+            "Avoid asset protection",
+            "Increase taxes",
+            "Efficient transfer of assets and tax benefits",
+            "Eliminate inheritance"
+          ],
+          correctAnswer: 2
+        }
+      ]
+    }
+  };
+
+  const [showTestModal, setShowTestModal] = useState(false);
+  const [selectedTest, setSelectedTest] = useState(null);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResults, setShowResults] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+
+  // Update test points rewards
+  const testPointsReward = {
+    beginner: 100,      // Points for passing beginner test
+    intermediate: 150,  // Points for passing intermediate test
+    advanced: 200,      // Points for passing advanced test
+    expert: 250        // Points for passing expert test
+  };
+
+  const handleStartTest = (level) => {
+    setSelectedTest(level);
+    setCurrentQuestion(0);
+    setScore(0);
+    setShowResults(false);
+    setShowTestModal(true);
+  };
+
+  // Update handleAnswer function to handle points only through tests
+  const handleAnswer = (answerIndex) => {
+    setSelectedAnswer(answerIndex);
+    const currentTest = testContent[selectedTest];
+    if (answerIndex === currentTest.questions[currentQuestion].correctAnswer) {
+      setScore(score + 1);
+    }
+    
+    setTimeout(() => {
+      if (currentQuestion < currentTest.questions.length - 1) {
+        setCurrentQuestion(currentQuestion + 1);
+        setSelectedAnswer(null);
+      } else {
+        const finalScore = ((score + (answerIndex === currentTest.questions[currentQuestion].correctAnswer ? 1 : 0)) / currentTest.questions.length) * 100;
+        
+        // Update test scores
+        const previousScore = testScores[selectedTest];
+        setTestScores(prev => ({
+          ...prev,
+          [selectedTest]: Math.max(finalScore, prev[selectedTest])
+        }));
+
+        // Award points only if:
+        // 1. Test is passed (meets threshold)
+        // 2. Previous score was below threshold (first time passing)
+        // 3. New score is above threshold
+        if (finalScore >= testThresholds[selectedTest] && 
+            previousScore < testThresholds[selectedTest]) {
+          const newPoints = userPoints + testPointsReward[selectedTest];
+          setUserPoints(newPoints);
+          checkLevelUnlock(newPoints);
+        }
+        
+        setShowResults(true);
+      }
+    }, 1000);
+  };
+
+  const renderTestModal = () => {
+    if (!selectedTest || !testContent[selectedTest]) return null;
+
+    const currentTest = testContent[selectedTest];
+    const currentQ = currentTest.questions[currentQuestion];
+
+    return (
+      <Modal
+        visible={showTestModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowTestModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{currentTest.title}</Text>
+              <TouchableOpacity
+                onPress={() => setShowTestModal(false)}
+                style={styles.closeButton}
+              >
+                <Icon name="close" size={24} color="#6B7280" />
+              </TouchableOpacity>
+            </View>
+
+            {!showResults ? (
+              <>
+                <View style={styles.questionContainer}>
+                  <Text style={styles.questionNumber}>Question {currentQuestion + 1} of {currentTest.questions.length}</Text>
+                  <Text style={styles.questionText}>{currentQ.question}</Text>
+                </View>
+
+                <View style={styles.optionsContainer}>
+                  {currentQ.options.map((option, index) => (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.optionButton,
+                        selectedAnswer === index && styles.selectedOption,
+                        selectedAnswer !== null && index === currentQ.correctAnswer && styles.correctOption,
+                        selectedAnswer === index && selectedAnswer !== currentQ.correctAnswer && styles.wrongOption
+                      ]}
+                      onPress={() => selectedAnswer === null && handleAnswer(index)}
+                      disabled={selectedAnswer !== null}
+                    >
+                      <Text style={[
+                        styles.optionText,
+                        selectedAnswer === index && styles.selectedOptionText
+                      ]}>{option}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </>
+            ) : (
+              <View style={styles.resultsContainer}>
+                <Text style={styles.scoreText}>Your Score: {score}/{currentTest.questions.length}</Text>
+                <Text style={styles.scorePercentage}>
+                  {Math.round((score / currentTest.questions.length) * 100)}%
+                </Text>
+                {Math.round((score / currentTest.questions.length) * 100) >= testThresholds[selectedTest] && 
+                 testScores[selectedTest] < testThresholds[selectedTest] && (
+                  <View style={styles.pointsEarnedContainer}>
+                    <Icon name="star" size={24} color={colors.primary.main} />
+                    <Text style={styles.pointsEarnedText}>
+                      +{testPointsReward[selectedTest]} points earned!
+                    </Text>
+                  </View>
+                )}
+                <TouchableOpacity
+                  style={styles.retakeButton}
+                  onPress={() => {
+                    setCurrentQuestion(0);
+                    setScore(0);
+                    setShowResults(false);
+                    setSelectedAnswer(null);
+                  }}
+                >
+                  <Text style={styles.retakeButtonText}>Retake Test</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
+  // Add test scores state
+  const [testScores, setTestScores] = useState({
+    beginner: 0,
+    intermediate: 0,
+    advanced: 0,
+    expert: 0
+  });
+
+  // Add test thresholds
+  const testThresholds = {
+    beginner: 60,
+    intermediate: 70,
+    advanced: 80,
+    expert: 90
+  };
+
+  const renderTestsSection = () => (
+    <View style={styles.section}>
+      <ScrollView style={styles.testsContainer}>
+        {Object.entries(testContent).map(([level, test]) => {
+          const isUnlocked = isLevelUnlocked(level);
+          const score = testScores[level];
+          const isPassed = score >= testThresholds[level];
+          const pointsRequired = levelRequirements[level];
+          const hasPoints = userPoints >= pointsRequired;
+          const levelIndex = levels.indexOf(level);
+          const previousLevel = levelIndex > 0 ? levels[levelIndex - 1] : null;
+          
+          return (
+            <TouchableOpacity
+              key={level}
+              style={[
+                styles.testCard,
+                !isUnlocked && styles.lockedTestCard,
+                isPassed && styles.passedTestCard
+              ]}
+              onPress={() => isUnlocked && handleStartTest(level)}
+              disabled={!isUnlocked}
+            >
+              <View style={styles.testCardContent}>
+                <Icon
+                  name={!isUnlocked ? "lock" : isPassed ? "check-circle" : "pencil-circle"}
+                  size={32}
+                  color={!isUnlocked ? "#9CA3AF" : isPassed ? "#059669" : colors.primary.main}
+                />
+                <View style={styles.testCardText}>
+                  <Text style={styles.testCardTitle}>{test.title}</Text>
+                  <Text style={styles.testCardDescription}>
+                    {!isUnlocked ? 
+                      `Requirements: ${pointsRequired} points${previousLevel ? ` and pass ${previousLevel} test` : ''}` :
+                      score > 0 ?
+                        `Your best score: ${score}% (${score >= testThresholds[level] ? 'Passed' : 'Not Passed'})` :
+                        `${test.questions.length} questions - Need ${testThresholds[level]}% to pass`
+                    }
+                  </Text>
+                  {!isUnlocked && (
+                    <View style={styles.requirementsList}>
+                      <Text style={[styles.requirementText, hasPoints && styles.metRequirement]}>
+                        • Points: {userPoints}/{pointsRequired}
+                      </Text>
+                      {previousLevel && (
+                        <Text style={[
+                          styles.requirementText, 
+                          testScores[previousLevel] >= testThresholds[previousLevel] && 
+                          styles.metRequirement
+                        ]}>
+                          • Previous Test: {testScores[previousLevel]}%/{testThresholds[previousLevel]}%
+                        </Text>
+                      )}
+                    </View>
+                  )}
+                </View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+      {renderTestModal()}
+    </View>
+  );
+
+  // Update the main return statement to include the tests section
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -1098,9 +1602,13 @@ const FinancialEducationScreen = () => {
             contentContainerStyle={styles.scrollContent}>
             {renderModulesSection()}
           </ScrollView>
-        ) : (
+        ) : activeSection === 'videos' ? (
           <View style={styles.content}>
             {renderVideosSection()}
+          </View>
+        ) : (
+          <View style={styles.content}>
+            {renderTestsSection()}
           </View>
         )}
       </View>
@@ -1505,6 +2013,167 @@ const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: '#9CA3AF',
+  },
+  testsContainer: {
+    padding: 16,
+  },
+  testCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  lockedTestCard: {
+    opacity: 0.7,
+    backgroundColor: '#F3F4F6',
+  },
+  testCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  testCardText: {
+    marginLeft: 12,
+    flex: 1,
+  },
+  testCardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  testCardDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  questionContainer: {
+    marginBottom: 24,
+  },
+  questionNumber: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 8,
+  },
+  questionText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
+    lineHeight: 24,
+  },
+  optionsContainer: {
+    marginBottom: 24,
+  },
+  optionButton: {
+    backgroundColor: '#F3F4F6',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+  },
+  selectedOption: {
+    backgroundColor: `${colors.primary.main}15`,
+    borderColor: colors.primary.main,
+    borderWidth: 1,
+  },
+  correctOption: {
+    backgroundColor: '#D1FAE5',
+    borderColor: '#059669',
+    borderWidth: 1,
+  },
+  wrongOption: {
+    backgroundColor: '#FEE2E2',
+    borderColor: '#DC2626',
+    borderWidth: 1,
+  },
+  optionText: {
+    fontSize: 16,
+    color: '#1F2937',
+  },
+  selectedOptionText: {
+    color: colors.primary.main,
+    fontWeight: '600',
+  },
+  resultsContainer: {
+    alignItems: 'center',
+    padding: 24,
+  },
+  scoreText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 8,
+  },
+  scorePercentage: {
+    fontSize: 48,
+    fontWeight: '700',
+    color: colors.primary.main,
+    marginBottom: 24,
+  },
+  retakeButton: {
+    backgroundColor: colors.primary.main,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  retakeButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  testScoreContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: `${colors.primary.main}15`,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: `${colors.primary.main}30`,
+  },
+  testScoreText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary.main,
+    marginLeft: 6,
+  },
+  passedTestCard: {
+    borderColor: '#059669',
+    borderWidth: 1,
+    backgroundColor: '#F0FDF4',
+  },
+  requirementsList: {
+    marginTop: 8,
+  },
+  requirementText: {
+    fontSize: 12,
+    color: '#DC2626',
+    marginBottom: 2,
+  },
+  metRequirement: {
+    color: '#059669',
+  },
+  pointsEarnedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: `${colors.primary.main}15`,
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  pointsEarnedText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.primary.main,
+    marginLeft: 8,
   },
 });
 
