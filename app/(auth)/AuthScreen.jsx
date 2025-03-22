@@ -20,8 +20,10 @@ import SkillsScreen from '../(screens)/SkillsScreen';
 import { colors, shadows, semantic, components } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Create axios instance with default config
+
 const api = axios.create({
   baseURL: 'https://myapp.loca.lt/api',
   headers: {
@@ -75,9 +77,10 @@ const AuthScreen = () => {
 
         const response = await api.post('/user/createUser', registrationData);
 
-        console.log('Registration response:', response.data);
+       
 
         if (response.data && response.data.jsonToken) {
+          await AsyncStorage.setItem('authToken', response.data.jsonToken);
           // Store the registration response and show skills screen
           setRegistrationResponse(response.data);
           setShowSkillsScreen(true);
@@ -125,11 +128,11 @@ const AuthScreen = () => {
           password: formData.password.trim()
         });
 
-        console.log('Server response:', response.data);
-
         // Check if we have a successful response with token
-        if (response.data && response.data.jsonToken) {
+        if (response?.data?.jsonToken) {
           console.log('Login successful:', response.data);
+          // Store the token
+          await AsyncStorage.setItem('authToken', response.data.jsonToken);
           // Sign in with the received auth data
           await signIn({
             jsonToken: response.data.jsonToken,
@@ -138,13 +141,15 @@ const AuthScreen = () => {
             ...response.data
           });
         } else {
+          console.error('Invalid server response:', response);
           throw new Error('Invalid response from server: No token received');
         }
       } catch (error) {
-        console.error('Login error:', error.response?.data || error.message);
+        console.error('Login error:', error);
         let errorMessage = 'Failed to sign in';
         
         if (error.response) {
+          console.error('Server error response:', error.response.data);
           switch (error.response.status) {
             case 401:
               errorMessage = 'Invalid email or password';
@@ -159,7 +164,11 @@ const AuthScreen = () => {
               errorMessage = error.response.data?.message || 'An error occurred during sign in';
           }
         } else if (error.request) {
+          console.error('No response received:', error.request);
           errorMessage = 'No response from server. Please check your internet connection.';
+        } else {
+          console.error('Error details:', error);
+          errorMessage = error.message || 'An unexpected error occurred';
         }
         
         Alert.alert('Error', errorMessage);

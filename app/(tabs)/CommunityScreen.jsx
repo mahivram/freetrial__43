@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,53 +9,228 @@ import {
   Image,
   FlatList,
   StatusBar,
+  Alert,
+  Modal as RNModal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, shadows, semantic, components } from '../theme/colors';
+import { storeAuthToken, isAuthenticated } from '../services/auth';
+import {io} from 'socket.io-client';
+import {
+  createCommunityPost,
+  getCommunityPosts,
+  getPostsByHeading,
+  addComment,
+  likePost,
+  deletePost,
+} from '../services/community';
+
+const SOCKET_URL = "https://myapp.loca.lt";
+const socket = io(SOCKET_URL);
+
 
 const CommunityScreen = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState('stories');
+  const [activeTab, setActiveTab] = useState('all');
   const [showNewPostModal, setShowNewPostModal] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [newPost, setNewPost] = useState({
+    heading: '',
+    heading_name: '',
+    description: '',
+    labels: [],
+  });
 
-  // Mock data for stories/posts
-  const posts = [
-    {
-      id: '1',
-      author: 'Priya Singh',
-      title: 'My Journey to Financial Independence',
-      content: 'Started my small business three years ago, and today I employ 5 other women...',
-      category: 'Success Story',
-      likes: 128,
-      comments: 45,
-      timeAgo: '2h ago',
-      avatar: 'https://picsum.photos/200',
-      tags: ['Entrepreneurship', 'Women Empowerment'],
-    },
-    {
-      id: '2',
-      author: 'Meera Patel',
-      title: 'Overcoming Challenges in Tech Industry',
-      content: 'As a woman in tech, I faced many obstacles but perseverance paid off...',
-      category: 'Career',
-      likes: 89,
-      comments: 32,
-      timeAgo: '5h ago',
-      avatar: 'https://picsum.photos/201',
-      tags: ['Technology', 'Career Growth'],
-    },
-    {
-      id: '3',
-      author: 'Dr. Anjali Kumar',
-      title: 'Mental Health Tips for Working Mothers',
-      content: 'Balancing work and family can be challenging. Here are some strategies...',
-      category: 'Mental Health',
-      likes: 156,
-      comments: 67,
-      timeAgo: '1d ago',
-      avatar: 'https://picsum.photos/202',
-      tags: ['Mental Health', 'Work-Life Balance'],
-    },
-  ];
+  // Add timeout ref
+  const timeoutRef = React.useRef(null);
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    socket.connect(); // Connect when the component mounts
+
+    socket.on("message", (data) => {
+      console.log(data);
+    });
+
+    return () => {
+      socket.disconnect(); // Cleanup on unmount
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const resetCreatePostState = () => {
+    setIsLoading(false);
+    setNewPost({
+      heading: '',
+      heading_name: '',
+      description: '',
+      labels: [],
+    });
+  };
+
+  const handleModalClose = () => {
+    if (isLoading) {
+      Alert.alert(
+        'Warning',
+        'Are you sure you want to cancel the post creation?',
+        [
+          { text: 'No', style: 'cancel' },
+          {
+            text: 'Yes',
+            style: 'destructive',
+            onPress: () => {
+              resetCreatePostState();
+              setShowNewPostModal(false);
+            },
+          },
+        ]
+      );
+    } else {
+      resetCreatePostState();
+      setShowNewPostModal(false);
+    }
+  };
+
+  // Store JWT token and check authentication on mount
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // Store the token
+        // await storeAuthToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImVtYWlsIjoiam9obmRvZUBleGFtcGxlIiwibW9fdXNlciI6IjA5ODc2NTQzMjEiLCJfaWQiOiI2N2QzMTQxOTY3YjAzODFkODQwMDQ5NjAifSwiaWF0IjoxNzQyNjIzNjQyLCJleHAiOjE3NDI3MTAwNDJ9.uFDWveaUojPFCtyp3fLs2ZDteDS-PT-0jEiYf5mTpMw');
+        
+        // Verify authentication
+        const isAuth = await isAuthenticated();
+        if (!isAuth) {
+          Alert.alert('Error', 'Authentication failed');
+          navigation.navigate('Login'); // Navigate to login if not authenticated
+          return;
+        }
+
+        // If authenticated, fetch posts
+        fetchPosts();
+      } catch (error) {
+        console.error('Authentication error:', error);
+        Alert.alert('Error', 'Failed to initialize authentication');
+      }
+    };
+
+    initializeAuth();
+  }, []);
+
+  const fetchPosts = async () => {
+    try {
+      setIsLoading(true);
+      let response;
+      if (activeTab === 'all') {
+        response = await getCommunityPosts();
+      } else {
+        response = await getPostsByHeading(activeTab);
+      }
+      
+      if (response.error) {
+        Alert.alert('Error', response.error);
+        return;
+      }
+      
+      setPosts(response);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch posts');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreatePost = async () => {
+    if (!newPost.heading_name.trim() || !newPost.description.trim() || !newPost.heading) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Set a timeout to prevent infinite loading
+      timeoutRef.current = setTimeout(() => {
+        if (isLoading) {
+          setIsLoading(false);
+          Alert.alert(
+            'Error',
+            'Request timed out. Please try again.'
+          );
+        }
+      }, 15000); // 15 seconds timeout
+
+      const response = await createCommunityPost(newPost);
+      
+      // Clear timeout as request completed
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      if (response.error) {
+        Alert.alert('Error', response.error);
+        return;
+      }
+
+      setShowNewPostModal(false);
+      resetCreatePostState();
+      fetchPosts(); // Refresh posts
+      Alert.alert('Success', 'Post created successfully!');
+    } catch (error) {
+      console.error('Create post error:', error);
+      Alert.alert(
+        'Error',
+        'Failed to create post. Please check your connection and try again.'
+      );
+    } finally {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      setIsLoading(false);
+    }
+  };
+
+  const handleLikePost = async (postId) => {
+    try {
+      const response = await likePost(postId);
+      if (response.error) {
+        Alert.alert('Error', response.error);
+        return;
+      }
+      fetchPosts(); // Refresh posts to update likes
+    } catch (error) {
+      Alert.alert('Error', 'Failed to like post');
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    Alert.alert(
+      'Delete Post',
+      'Are you sure you want to delete this post?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await deletePost(postId);
+              if (response.error) {
+                Alert.alert('Error', response.error);
+                return;
+              }
+              fetchPosts(); // Refresh posts
+              Alert.alert('Success', 'Post deleted successfully!');
+            } catch (error) {
+              Alert.alert('Error', 'Failed to delete post');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   // Mock data for categories
   const categories = [
@@ -68,51 +243,73 @@ const CommunityScreen = ({ navigation }) => {
   ];
 
   const renderPost = ({ item }) => (
-    <TouchableOpacity style={styles.postCard}>
+    <TouchableOpacity 
+      style={styles.postCard}
+      onPress={() => navigation.navigate('PostDetail', { post: item })}>
       <View style={styles.postHeader}>
         <View style={styles.authorInfo}>
-          <Image source={{ uri: item.avatar }} style={styles.avatar} />
+          <Image 
+            source={{ uri: item.createdBy?.profilePic || 'https://picsum.photos/200' }} 
+            style={styles.avatar} 
+          />
           <View>
-            <Text style={styles.authorName}>{item.author}</Text>
-            <Text style={styles.timeAgo}>{item.timeAgo}</Text>
+            <Text style={styles.authorName}>{item.createdBy?.name || 'Anonymous'}</Text>
+            <Text style={styles.timeAgo}>
+              
+              {new Date(item.createdAt).toLocaleDateString("en-GB")}
+            </Text>
           </View>
         </View>
         <TouchableOpacity style={styles.categoryBadge}>
           <Icon 
-            name={categories.find(c => c.name === item.category)?.icon || 'tag'} 
+            name={categories.find(c => c.name === item.heading)?.icon || 'tag'} 
             size={14} 
             color={colors.primary.main} 
             style={styles.categoryIcon}
           />
-          <Text style={styles.categoryText}>{item.category}</Text>
+          <Text style={styles.categoryText}>{item.heading}</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.postTitle}>{item.title}</Text>
+      <Text style={styles.postTitle}>{item.heading_name}</Text>
       <Text style={styles.postContent} numberOfLines={3}>
-        {item.content}
+        {item.description}
       </Text>
 
       <View style={styles.tagsContainer}>
-        {item.tags.map((tag, index) => (
-          <View key={index} style={styles.tag}>
-            <Text style={styles.tagText}>#{tag}</Text>
-          </View>
-        ))}
+        {Array.isArray(item.labels) && item.labels.length > 0 ? (
+          item.labels.map((label, index) => (
+            <View key={index} style={styles.tag}>
+              <Text style={styles.tagText}>#{label}</Text>
+            </View>
+          ))
+        ) : null}
       </View>
 
       <View style={styles.postFooter}>
-        <TouchableOpacity style={styles.footerButton}>
-          <Icon name="heart-outline" size={22} color={colors.primary.main} />
-          <Text style={styles.footerButtonText}>{item.likes}</Text>
+        <TouchableOpacity 
+          style={styles.footerButton}
+          onPress={() => handleLikePost(item._id)}>
+          <Icon 
+            name={item.isLiked ? "heart" : "heart-outline"} 
+            size={22} 
+            color={item.isLiked ? colors.error.main : colors.primary.main} 
+          />
+          <Text style={styles.footerButtonText}>{item.likes?.length || 0}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
+        <TouchableOpacity 
+          style={styles.footerButton}
+          onPress={() => navigation.navigate('PostDetail', { post: item })}>
           <Icon name="comment-outline" size={22} color={colors.primary.main} />
-          <Text style={styles.footerButtonText}>{item.comments}</Text>
+          <Text style={styles.footerButtonText}>{item.comments?.length || 0}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Icon name="share-outline" size={22} color={colors.primary.main} />
-        </TouchableOpacity>
+        {item.isAuthor && (
+          <TouchableOpacity 
+            style={styles.footerButton}
+            onPress={() => handleDeletePost(item._id)}>
+            <Icon name="delete-outline" size={22} color={colors.error.main} />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -168,6 +365,81 @@ const CommunityScreen = ({ navigation }) => {
     </View>
   );
 
+  // New Post Modal
+  const renderNewPostModal = () => (
+    <RNModal
+      visible={showNewPostModal}
+      animationType="slide"
+      transparent
+      onRequestClose={handleModalClose}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Create New Post</Text>
+            <TouchableOpacity
+              onPress={handleModalClose}
+              style={styles.modalCloseButton}>
+              <Icon name="close" size={24} color={semantic.text.primary} />
+            </TouchableOpacity>
+          </View>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Post Title"
+            value={newPost.heading_name}
+            onChangeText={(text) => setNewPost(prev => ({ ...prev, heading_name: text }))}
+          />
+
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Write your story..."
+            value={newPost.description}
+            onChangeText={(text) => setNewPost(prev => ({ ...prev, description: text }))}
+            multiline
+            numberOfLines={4}
+          />
+
+          <View style={styles.categorySelector}>
+            {categories.slice(1).map((category) => (
+              <TouchableOpacity
+                key={category.id}
+                style={[
+                  styles.categoryChip,
+                  newPost.heading === category.name && styles.activeCategoryChip,
+                ]}
+                onPress={() => setNewPost(prev => ({ ...prev, heading: category.name }))}>
+                <Icon 
+                  name={category.icon} 
+                  size={20} 
+                  color={newPost.heading === category.name ? semantic.text.inverse : colors.primary.main} 
+                />
+                <Text
+                  style={[
+                    styles.categoryChipText,
+                    newPost.heading === category.name && styles.activeCategoryChipText,
+                  ]}>
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <TouchableOpacity
+            style={[
+              styles.createButton,
+              (!newPost.heading_name || !newPost.description || !newPost.heading) && styles.createButtonDisabled
+            ]}
+            disabled={!newPost.heading_name || !newPost.description || !newPost.heading || isLoading}
+            onPress={handleCreatePost}>
+            <Text style={styles.createButtonText}>
+              {isLoading ? 'Creating...' : 'Create Post'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </RNModal>
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -178,18 +450,21 @@ const CommunityScreen = ({ navigation }) => {
       <FlatList
         data={posts}
         renderItem={renderPost}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.postsList}
         ListHeaderComponent={renderHeader}
+        refreshing={isLoading}
+        onRefresh={fetchPosts}
       />
 
-      {/* Floating Action Button */}
       <TouchableOpacity 
         style={styles.fab}
         onPress={() => setShowNewPostModal(true)}>
         <Icon name="plus" size={24} color={semantic.text.inverse} />
       </TouchableOpacity>
+
+      {renderNewPostModal()}
     </View>
   );
 };
@@ -401,6 +676,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.primary,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  modalContent: {
+    backgroundColor: semantic.background.paper,
+    borderRadius: 16,
+    padding: 20,
+    maxHeight: '80%',
+  },
+  input: {
+    backgroundColor: semantic.background.default,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: semantic.border.light,
+    color: semantic.text.primary,
+  },
+  textArea: {
+    height: 120,
+    textAlignVertical: 'top',
+  },
+  categorySelector: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 20,
+  },
+  createButton: {
+    backgroundColor: colors.primary.main,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  createButtonDisabled: {
+    backgroundColor: semantic.background.disabled,
+  },
+  createButtonText: {
+    color: semantic.text.inverse,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: semantic.text.primary,
+  },
+  modalCloseButton: {
+    padding: 8,
   },
 });
 
