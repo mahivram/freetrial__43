@@ -9,105 +9,129 @@ import {
   StatusBar,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { colors, semantic } from '../theme/colors';
-import { useRouter } from 'expo-router';
+import { colors, semantic, components, shadows } from '../theme/colors';
+import { router } from 'expo-router';
+import { useAuth } from '../context/AuthContext';
 
-const SkillsScreen = () => {
+const skillCategories = [
+  {
+    category: 'Culinary Arts',
+    skills: [
+      { id: 1, name: 'Baking & Pastry', icon: 'cake-variant' },
+      { id: 2, name: 'Traditional Cooking', icon: 'pot-steam' },
+      { id: 3, name: 'Food Preservation', icon: 'food-variant' },
+      { id: 4, name: 'Catering Business', icon: 'food-fork-drink' },
+      { id: 5, name: 'International Cuisine', icon: 'earth' },
+    ],
+  },
+  {
+    category: 'Textile & Crafts',
+    skills: [
+      { id: 6, name: 'Tailoring', icon: 'scissors-cutting' },
+      { id: 7, name: 'Embroidery', icon: 'needle' },
+      { id: 8, name: 'Knitting', icon: 'yarn' },
+      { id: 9, name: 'Fashion Design', icon: 'tshirt-crew' },
+      { id: 10, name: 'Jewelry Making', icon: 'diamond-stone' },
+    ],
+  },
+  {
+    category: 'Home & Lifestyle',
+    skills: [
+      { id: 11, name: 'Interior Design', icon: 'home-variant' },
+      { id: 12, name: 'Garden & Agriculture', icon: 'sprout' },
+      { id: 13, name: 'Home Organization', icon: 'home-heart' },
+      { id: 14, name: 'Event Planning', icon: 'calendar-star' },
+      { id: 15, name: 'Beauty & Wellness', icon: 'spa' },
+    ],
+  },
+  {
+    category: 'Digital & Tech',
+    skills: [
+      { id: 16, name: 'Social Media', icon: 'instagram' },
+      { id: 17, name: 'Basic Web Design', icon: 'web' },
+      { id: 18, name: 'Digital Marketing', icon: 'trending-up' },
+      { id: 19, name: 'Content Creation', icon: 'video' },
+      { id: 20, name: 'Online Business', icon: 'shopping' },
+    ],
+  },
+  {
+    category: 'Education & Care',
+    skills: [
+      { id: 21, name: 'Teaching', icon: 'school' },
+      { id: 22, name: 'Child Care', icon: 'baby-face' },
+      { id: 23, name: 'Elder Care', icon: 'account-child' },
+      { id: 24, name: 'Counseling', icon: 'heart-pulse' },
+      { id: 25, name: 'Life Coaching', icon: 'lightbulb-on' },
+    ],
+  },
+  {
+    category: 'Professional Tech',
+    skills: [
+      { id: 26, name: 'Data Entry', icon: 'keyboard' },
+      { id: 27, name: 'MS Office', icon: 'microsoft-office' },
+      { id: 28, name: 'Email Management', icon: 'email' },
+      { id: 29, name: 'Virtual Assistant', icon: 'desktop-mac' },
+      { id: 30, name: 'Customer Service', icon: 'headset' },
+    ],
+  },
+];
+
+const SkillsScreen = ({ onComplete, onSkip }) => {
+  const { setUserSkills } = useAuth();
   const [selectedSkills, setSelectedSkills] = useState([]);
-  const router = useRouter();
 
-  const skillCategories = [
-    {
-      category: 'Culinary Arts',
-      skills: [
-        { id: 1, name: 'Baking & Pastry', icon: 'cake-variant' },
-        { id: 2, name: 'Traditional Cooking', icon: 'pot-steam' },
-        { id: 3, name: 'Food Preservation', icon: 'food-variant' },
-        { id: 4, name: 'Catering Business', icon: 'food-fork-drink' },
-        { id: 5, name: 'International Cuisine', icon: 'earth' },
-      ],
-    },
-    {
-      category: 'Textile & Crafts',
-      skills: [
-        { id: 6, name: 'Tailoring', icon: 'scissors-cutting' },
-        { id: 7, name: 'Embroidery', icon: 'needle' },
-        { id: 8, name: 'Knitting', icon: 'yarn' },
-        { id: 9, name: 'Fashion Design', icon: 'tshirt-crew' },
-        { id: 10, name: 'Jewelry Making', icon: 'diamond-stone' },
-      ],
-    },
-    {
-      category: 'Home & Lifestyle',
-      skills: [
-        { id: 11, name: 'Interior Design', icon: 'home-variant' },
-        { id: 12, name: 'Garden & Agriculture', icon: 'sprout' },
-        { id: 13, name: 'Home Organization', icon: 'home-heart' },
-        { id: 14, name: 'Event Planning', icon: 'calendar-star' },
-        { id: 15, name: 'Beauty & Wellness', icon: 'spa' },
-      ],
-    },
-    {
-      category: 'Digital & Tech',
-      skills: [
-        { id: 16, name: 'Social Media', icon: 'instagram' },
-        { id: 17, name: 'Basic Web Design', icon: 'web' },
-        { id: 18, name: 'Digital Marketing', icon: 'trending-up' },
-        { id: 19, name: 'Content Creation', icon: 'video' },
-        { id: 20, name: 'Online Business', icon: 'shopping' },
-      ],
-    },
-    {
-      category: 'Education & Care',
-      skills: [
-        { id: 21, name: 'Teaching', icon: 'school' },
-        { id: 22, name: 'Child Care', icon: 'baby-face' },
-        { id: 23, name: 'Elder Care', icon: 'account-child' },
-        { id: 24, name: 'Counseling', icon: 'heart-pulse' },
-        { id: 25, name: 'Life Coaching', icon: 'lightbulb-on' },
-      ],
-    },
-    {
-      category: 'Professional Tech',
-      skills: [
-        { id: 26, name: 'Data Entry', icon: 'keyboard' },
-        { id: 27, name: 'MS Office', icon: 'microsoft-office' },
-        { id: 28, name: 'Email Management', icon: 'email' },
-        { id: 29, name: 'Virtual Assistant', icon: 'desktop-mac' },
-        { id: 30, name: 'Customer Service', icon: 'headset' },
-      ],
-    },
-  ];
-
-  const toggleSkill = (skillId) => {
-    setSelectedSkills((prevSkills) => {
-      if (prevSkills.includes(skillId)) {
-        return prevSkills.filter((id) => id !== skillId);
-      } else {
-        if (prevSkills.length >= 5) {
-          Alert.alert('Maximum Skills', 'You can select up to 5 skills');
-          return prevSkills;
-        }
-        return [...prevSkills, skillId];
-      }
-    });
+  const toggleSkill = (skillName) => {
+    setSelectedSkills((prevSkills) =>
+      prevSkills.includes(skillName)
+        ? prevSkills.filter((s) => s !== skillName)
+        : [...prevSkills, skillName]
+    );
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (selectedSkills.length === 0) {
-      Alert.alert('Select Skills', 'Please select at least one skill');
+      Alert.alert(
+        'No Skills Selected',
+        'Are you sure you want to continue without selecting any skills?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Continue',
+            onPress: handleSkip,
+          },
+        ]
+      );
       return;
     }
-    const selectedSkillNames = selectedSkills.map((skillId) => {
-      const skill = skillCategories
-        .flatMap((category) => category.skills)
-        .find((s) => s.id === skillId);
-      return skill.name;
-    });
-    router.push({
-      pathname: "/(tabs)/home",
-      params: { selectedSkills: selectedSkillNames }
-    });
+
+    try {
+      await setUserSkills(selectedSkills);
+      if (onComplete) {
+        await onComplete(selectedSkills);
+      } else {
+        router.replace('/(tabs)/SkillLearningScreen');
+      }
+    } catch (error) {
+      console.error('Error saving skills:', error);
+      Alert.alert('Error', 'Failed to save skills. Please try again.');
+    }
+  };
+
+  const handleSkip = async () => {
+    try {
+      await setUserSkills([]);
+      if (onSkip) {
+        await onSkip();
+      } else {
+        router.replace('/(tabs)/home');
+      }
+    } catch (error) {
+      console.error('Error skipping skills:', error);
+      Alert.alert('Error', 'Failed to skip. Please try again.');
+    }
   };
 
   return (
@@ -120,18 +144,18 @@ const SkillsScreen = () => {
         <TouchableOpacity 
           style={styles.backButton}
           onPress={() => router.back()}>
-          <Icon name="arrow-left" size={24} color="#333" />
+          <Icon name="arrow-left" size={24} color={semantic.text.primary} />
         </TouchableOpacity>
         <Icon name="star-circle" size={60} color={colors.primary.main} />
         <Text style={styles.title}>Select Your Skills</Text>
         <Text style={styles.subtitle}>
-          Choose up to 5 skills that showcase your talents
+          Choose the skills you want to learn or improve
         </Text>
       </View>
 
       <ScrollView style={styles.scrollView}>
         {skillCategories.map((category) => (
-          <View key={category.category} style={styles.categoryContainer}>
+          <View key={category.category} style={styles.categorySection}>
             <Text style={styles.categoryTitle}>{category.category}</Text>
             <View style={styles.skillsGrid}>
               {category.skills.map((skill) => (
@@ -139,18 +163,19 @@ const SkillsScreen = () => {
                   key={skill.id}
                   style={[
                     styles.skillButton,
-                    selectedSkills.includes(skill.id) && styles.selectedSkill,
+                    selectedSkills.includes(skill.name) && styles.selectedSkillButton,
                   ]}
-                  onPress={() => toggleSkill(skill.id)}>
+                  onPress={() => toggleSkill(skill.name)}>
                   <Icon
                     name={skill.icon}
                     size={24}
-                    color={selectedSkills.includes(skill.id) ? semantic.text.inverse : semantic.text.secondary}
+                    color={selectedSkills.includes(skill.name) ? semantic.text.white : colors.primary.main}
+                    style={styles.skillIcon}
                   />
                   <Text
                     style={[
-                      styles.skillText,
-                      selectedSkills.includes(skill.id) && styles.selectedSkillText,
+                      styles.skillButtonText,
+                      selectedSkills.includes(skill.name) && styles.selectedSkillButtonText,
                     ]}>
                     {skill.name}
                   </Text>
@@ -162,17 +187,15 @@ const SkillsScreen = () => {
       </ScrollView>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity 
-          style={styles.skipButton} 
-          onPress={() => router.push("/(tabs)/home")}>
-          <Text style={styles.skipButtonText}>Skip for now</Text>
-        </TouchableOpacity>
-
         <TouchableOpacity
-          style={[styles.continueButton]}
+          style={[styles.button, styles.completeButton]}
           onPress={handleComplete}>
-          <Text style={styles.continueButtonText}>Continue</Text>
-          <Icon name="arrow-right" size={20} color={semantic.text.inverse} style={styles.buttonIcon} />
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.skipButton]}
+          onPress={handleSkip}>
+          <Text style={[styles.buttonText, styles.skipButtonText]}>Skip</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -204,72 +227,77 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  categoryContainer: {
-    marginBottom: 20,
+  categorySection: {
+    marginBottom: 24,
     paddingHorizontal: 20,
   },
   categoryTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: semantic.text.primary,
-    marginBottom: 10,
+    marginBottom: 12,
   },
   skillsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: -5,
+    justifyContent: 'space-between',
   },
   skillButton: {
+    width: '48%',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: semantic.background.card,
-    borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    margin: 5,
-    minWidth: '45%',
+    backgroundColor: semantic.background.paper,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: semantic.border.light,
+    ...shadows.sm,
   },
-  selectedSkill: {
+  selectedSkillButton: {
     backgroundColor: colors.primary.main,
+    borderColor: colors.primary.main,
   },
-  skillText: {
-    marginLeft: 8,
-    color: semantic.text.secondary,
+  skillIcon: {
+    marginRight: 8,
+  },
+  skillButtonText: {
+    flex: 1,
     fontSize: 14,
+    color: semantic.text.primary,
+    fontWeight: '500',
   },
-  selectedSkillText: {
-    color: semantic.text.inverse,
+  selectedSkillButtonText: {
+    color: semantic.text.white,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     padding: 20,
+    backgroundColor: semantic.background.paper,
+    borderTopWidth: 1,
+    borderTopColor: semantic.border.light,
+  },
+  button: {
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+    ...shadows.sm,
+  },
+  completeButton: {
+    backgroundColor: components.button.primary.background,
   },
   skipButton: {
-    padding: 15,
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: semantic.border.light,
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: components.button.primary.text,
   },
   skipButtonText: {
     color: semantic.text.secondary,
-    fontSize: 16,
-  },
-  continueButton: {
-    flex: 1,
-    backgroundColor: colors.primary.main,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 15,
-    marginLeft: 20,
-    borderRadius: 10,
-  },
-  continueButtonText: {
-    color: semantic.text.inverse,
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  buttonIcon: {
-    marginLeft: 10,
   },
   backButton: {
     position: 'absolute',

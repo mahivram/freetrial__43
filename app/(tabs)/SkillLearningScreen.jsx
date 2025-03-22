@@ -16,18 +16,87 @@ import VideoPlayer from '../components/VideoPlayer';
 import SkillsEditor from '../components/SkillsEditor';
 import { getCachedTutorials } from '../services/youtubeService';
 import { colors, shadows, semantic, components } from '../theme/colors';
+import { useAuth } from '../context/AuthContext';
 
-const defaultSkills = ['Baking & Pastry', 'Traditional Cooking', 'Food Preservation'];
+const skillCategories = [
+  {
+    category: 'Culinary Arts',
+    skills: [
+      { id: 1, name: 'Baking & Pastry', icon: 'cake-variant' },
+      { id: 2, name: 'Traditional Cooking', icon: 'pot-steam' },
+      { id: 3, name: 'Food Preservation', icon: 'food-variant' },
+      { id: 4, name: 'Catering Business', icon: 'food-fork-drink' },
+      { id: 5, name: 'International Cuisine', icon: 'earth' },
+    ],
+  },
+  {
+    category: 'Textile & Crafts',
+    skills: [
+      { id: 6, name: 'Tailoring', icon: 'scissors-cutting' },
+      { id: 7, name: 'Embroidery', icon: 'needle' },
+      { id: 8, name: 'Knitting', icon: 'yarn' },
+      { id: 9, name: 'Fashion Design', icon: 'tshirt-crew' },
+      { id: 10, name: 'Jewelry Making', icon: 'diamond-stone' },
+    ],
+  },
+  {
+    category: 'Home & Lifestyle',
+    skills: [
+      { id: 11, name: 'Interior Design', icon: 'home-variant' },
+      { id: 12, name: 'Garden & Agriculture', icon: 'sprout' },
+      { id: 13, name: 'Home Organization', icon: 'home-heart' },
+      { id: 14, name: 'Event Planning', icon: 'calendar-star' },
+      { id: 15, name: 'Beauty & Wellness', icon: 'spa' },
+    ],
+  },
+  {
+    category: 'Digital & Tech',
+    skills: [
+      { id: 16, name: 'Social Media', icon: 'instagram' },
+      { id: 17, name: 'Basic Web Design', icon: 'web' },
+      { id: 18, name: 'Digital Marketing', icon: 'trending-up' },
+      { id: 19, name: 'Content Creation', icon: 'video' },
+      { id: 20, name: 'Online Business', icon: 'shopping' },
+    ],
+  },
+  {
+    category: 'Education & Care',
+    skills: [
+      { id: 21, name: 'Teaching', icon: 'school' },
+      { id: 22, name: 'Child Care', icon: 'baby-face' },
+      { id: 23, name: 'Elder Care', icon: 'account-child' },
+      { id: 24, name: 'Counseling', icon: 'heart-pulse' },
+      { id: 25, name: 'Life Coaching', icon: 'lightbulb-on' },
+    ],
+  },
+  {
+    category: 'Professional Tech',
+    skills: [
+      { id: 26, name: 'Data Entry', icon: 'keyboard' },
+      { id: 27, name: 'MS Office', icon: 'microsoft-office' },
+      { id: 28, name: 'Email Management', icon: 'email' },
+      { id: 29, name: 'Virtual Assistant', icon: 'desktop-mac' },
+      { id: 30, name: 'Customer Service', icon: 'headset' },
+    ],
+  },
+];
 
 const SkillLearningScreen = () => {
   const router = useRouter();
+  const { userSkills, setUserSkills } = useAuth();
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videoModalVisible, setVideoModalVisible] = useState(false);
   const [skillsEditorVisible, setSkillsEditorVisible] = useState(false);
-  const [currentSkills, setCurrentSkills] = useState(defaultSkills);
+  const [currentSkills, setCurrentSkills] = useState([]);
   const [tutorials, setTutorials] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (userSkills && userSkills.length > 0) {
+      setCurrentSkills(userSkills);
+    }
+  }, [userSkills]);
 
   const loadTutorials = useCallback(async (skills) => {
     if (!skills || skills.length === 0) {
@@ -58,7 +127,7 @@ const SkillLearningScreen = () => {
     } finally {
       setLoading(false);
     }
-  }, []); // No dependencies needed as it's a stable function
+  }, []); 
 
   useEffect(() => {
     loadTutorials(currentSkills);
@@ -69,9 +138,14 @@ const SkillLearningScreen = () => {
     setVideoModalVisible(true);
   }, []);
 
-  const handleSkillsUpdate = useCallback((newSkills) => {
-    setCurrentSkills(newSkills);
-  }, []);
+  const handleSkillsUpdate = useCallback(async (newSkills) => {
+    try {
+      await setUserSkills(newSkills);
+      setCurrentSkills(newSkills);
+    } catch (error) {
+      console.error('Error updating skills:', error);
+    }
+  }, [setUserSkills]);
 
   const handleViewAll = useCallback((skill) => {
     router.push({
@@ -80,6 +154,20 @@ const SkillLearningScreen = () => {
     });
   }, [router]);
 
+  const getSkillIcon = (skillName) => {
+    const skill = skillCategories
+      .flatMap(category => category.skills)
+      .find(s => s.name === skillName);
+    return skill ? skill.icon : 'code-tags';
+  };
+
+  const getSkillCategory = (skillName) => {
+    const category = skillCategories.find(cat => 
+      cat.skills.some(s => s.name === skillName)
+    );
+    return category ? category.category : 'Other';
+  };
+
   const renderSkillSection = ({ item: skill }) => {
     const skillTutorials = tutorials[skill] || [];
     if (skillTutorials.length === 0) return null;
@@ -87,7 +175,18 @@ const SkillLearningScreen = () => {
     return (
       <View style={styles.skillSection}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.skillTitle}>{skill}</Text>
+          <View style={styles.skillTitleContainer}>
+            <MaterialCommunityIcons 
+              name={getSkillIcon(skill)} 
+              size={24} 
+              color={colors.primary.main} 
+              style={styles.skillIcon}
+            />
+            <View>
+              <Text style={styles.categoryTitle}>{getSkillCategory(skill)}</Text>
+              <Text style={styles.skillTitle}>{skill}</Text>
+            </View>
+          </View>
           <TouchableOpacity 
             style={styles.viewAllButton}
             onPress={() => handleViewAll(skill)}>
@@ -163,6 +262,12 @@ const SkillLearningScreen = () => {
                 <TouchableOpacity 
                   key={skill} 
                   style={styles.skillChip}>
+                  <MaterialCommunityIcons 
+                    name={getSkillIcon(skill)} 
+                    size={16} 
+                    color={colors.primary.main} 
+                    style={styles.chipIcon}
+                  />
                   <Text style={styles.skillChipText}>{skill}</Text>
                 </TouchableOpacity>
               ))
@@ -319,6 +424,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 15,
   },
+  skillTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  skillIcon: {
+    marginRight: 12,
+  },
+  categoryTitle: {
+    fontSize: 12,
+    color: semantic.text.secondary,
+    marginBottom: 4,
+  },
   skillTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -402,11 +519,16 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
   skillChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.primary.light,
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 16,
     marginRight: 8,
+  },
+  chipIcon: {
+    marginRight: 6,
   },
   skillChipText: {
     color: colors.primary.main,

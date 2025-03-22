@@ -173,24 +173,6 @@ const AuthScreen = () => {
     try {
       // Use the stored registration response
       if (registrationResponse && registrationResponse.jsonToken) {
-        try {
-          // Send skills to the addskills endpoint
-          await axios.post('https://myapp.loca.lt/api/user/addskills', 
-            { skills: skills }, // Send skills in the required format
-            {
-              headers: {
-                'Authorization': `Bearer ${registrationResponse.jsonToken}`
-              }
-            }
-          );
-          console.log("entered");
-          
-        } catch (updateError) {
-          console.error('Failed to update skills:', updateError);
-          // Continue with sign in even if skills update fails
-        }
-
-        // Then sign in the user with all data
         await signIn({
           jsonToken: registrationResponse.jsonToken,
           user_email: registrationResponse.email || formData.email,
@@ -214,21 +196,6 @@ const AuthScreen = () => {
     try {
       // Use the stored registration response
       if (registrationResponse && registrationResponse.jsonToken) {
-        try {
-          // Send empty skills array to the addskills endpoint
-          await api.post('/user/addskills', 
-            { skills: [] },
-            {
-              headers: {
-                'Authorization': `Bearer ${registrationResponse.jsonToken}`
-              }
-            }
-          );
-        } catch (updateError) {
-          console.error('Failed to update user:', updateError);
-          // Continue with sign in even if update fails
-        }
-
         await signIn({
           jsonToken: registrationResponse.jsonToken,
           user_email: registrationResponse.email || formData.email,

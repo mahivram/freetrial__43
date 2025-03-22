@@ -18,10 +18,11 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
 
-  const storeAuthData = async (authToken, user) => {
+  const storeAuthData = async (authToken, user, skills) => {
     try {
       await AsyncStorage.setItem('token', authToken);
       await AsyncStorage.setItem('userData', JSON.stringify(user));
+      await AsyncStorage.setItem('userSkills', JSON.stringify(skills));
     } catch (error) {
       console.error('Error storing auth data:', error);
     }
@@ -31,10 +32,12 @@ export function AuthProvider({ children }) {
     try {
       const storedToken = await AsyncStorage.getItem('token');
       const storedUserData = await AsyncStorage.getItem('userData');
+      const storedSkills = await AsyncStorage.getItem('userSkills');
       
       if (storedToken && storedUserData) {
         setToken(storedToken);
         setUserData(JSON.parse(storedUserData));
+        setUserSkills(storedSkills ? JSON.parse(storedSkills) : []);
         setIsAuthenticated(true);
         return true;
       }
@@ -49,20 +52,21 @@ export function AuthProvider({ children }) {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('userData');
+      await AsyncStorage.removeItem('userSkills');
     } catch (error) {
       console.error('Error clearing auth data:', error);
     }
   };
 
-  const signIn = async (authData, skills = []) => {
+  const signIn = async (authData) => {
     try {
-      const { jsonToken, ...userInfo } = authData;
-      await storeAuthData(jsonToken, userInfo);
+      const { jsonToken, skills = [], ...userInfo } = authData;
+      await storeAuthData(jsonToken, userInfo, skills);
       
       setToken(jsonToken);
       setUserData(userInfo);
-      setIsAuthenticated(true);
       setUserSkills(skills);
+      setIsAuthenticated(true);
       
       // Redirect to home screen after successful authentication
       router.replace('/(tabs)/home');
@@ -77,12 +81,22 @@ export function AuthProvider({ children }) {
       await clearAuthData();
       setToken(null);
       setUserData(null);
-      setIsAuthenticated(false);
       setUserSkills([]);
+      setIsAuthenticated(false);
       // Redirect to auth screen after logout
       router.replace('/(auth)/AuthScreen');
     } catch (error) {
       console.error('Error during sign out:', error);
+      throw error;
+    }
+  };
+
+  const updateUserSkills = async (skills) => {
+    try {
+      await AsyncStorage.setItem('userSkills', JSON.stringify(skills));
+      setUserSkills(skills);
+    } catch (error) {
+      console.error('Error updating skills:', error);
       throw error;
     }
   };
@@ -96,7 +110,7 @@ export function AuthProvider({ children }) {
         userData,
         signIn,
         signOut,
-        setUserSkills,
+        setUserSkills: updateUserSkills,
       }}>
       {children}
     </AuthContext.Provider>

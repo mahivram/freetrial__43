@@ -8,7 +8,7 @@ import {
   StatusBar,
   Modal,
 } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { colors, semantic } from '../theme/colors';
 
@@ -186,9 +186,9 @@ const DashboardScreen = ({ userSkills = [] }) => {
             </TouchableOpacity>
           </Link>
 
-          {/* AI Assistant Button */}
-          <Link href="/(screens)/AIAssistant" asChild>
-            <TouchableOpacity 
+          {/* Saheli AI Button */}
+          <Link href="/(screens)/SaheliAi" asChild>
+            <TouchableOpacity
               style={styles.aiButton}
               activeOpacity={0.7}>
               <View style={styles.aiContent}>
@@ -196,7 +196,7 @@ const DashboardScreen = ({ userSkills = [] }) => {
                   <Icon name="robot" size={32} color="#0284C7" />
                 </View>
                 <View style={styles.aiTextContainer}>
-                  <Text style={styles.aiTitle}>AI Assistant</Text>
+                  <Text style={styles.aiTitle}>Saheli AI</Text>
                   <Text style={styles.aiDescription}>
                     Get personalized help and guidance
                   </Text>
