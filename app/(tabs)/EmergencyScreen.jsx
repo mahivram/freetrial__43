@@ -10,15 +10,80 @@ import {
   Platform,
   StatusBar,
   ActivityIndicator,
+  TextInput,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { colors, shadows, semantic, components } from '../theme/colors';
 import axios from 'axios';
 import * as Location from 'expo-location';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmergencyScreen = () => {
   const [expandedSection, setExpandedSection] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadinglocation, setLoadinglocation] = useState(false);
+  const [parentContacts, setParentContacts] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [newContact, setNewContact] = useState({ name: '', number: '' });
+
+  // Load parent contacts on component mount
+  React.useEffect(() => {
+    loadParentContacts();
+  }, []);
+
+  const loadParentContacts = async () => {
+    try {
+      const contacts = await AsyncStorage.getItem('parentContacts');
+      if (contacts) {
+        setParentContacts(JSON.parse(contacts));
+      }
+    } catch (error) {
+      console.error('Error loading parent contacts:', error);
+    }
+  };
+
+  const saveParentContact = async () => {
+    if (!newContact.name.trim() || !newContact.number.trim()) {
+      Alert.alert('Error', 'Please enter both name and number');
+      return;
+    }
+
+    // Basic phone number validation
+    const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+    if (!phoneRegex.test(newContact.number.replace(/[\s-]/g, ''))) {
+      Alert.alert('Error', 'Please enter a valid phone number');
+      return;
+    }
+
+    try {
+      const updatedContacts = [...parentContacts, { 
+        id: Date.now().toString(),
+        ...newContact,
+        icon: 'account-heart' 
+      }];
+      await AsyncStorage.setItem('parentContacts', JSON.stringify(updatedContacts));
+      setParentContacts(updatedContacts);
+      setModalVisible(false);
+      setNewContact({ name: '', number: '' });
+      Alert.alert('Success', 'Emergency contact added successfully');
+    } catch (error) {
+      console.error('Error saving parent contact:', error);
+      Alert.alert('Error', 'Failed to save contact');
+    }
+  };
+
+  const deleteParentContact = async (contactId) => {
+    try {
+      const updatedContacts = parentContacts.filter(contact => contact.id !== contactId);
+      await AsyncStorage.setItem('parentContacts', JSON.stringify(updatedContacts));
+      setParentContacts(updatedContacts);
+      Alert.alert('Success', 'Contact removed successfully');
+    } catch (error) {
+      console.error('Error deleting parent contact:', error);
+      Alert.alert('Error', 'Failed to remove contact');
+    }
+  };
 
   const emergencyContacts = [
     { id: '1', name: 'Police', number: '+919638453973', icon: 'police-badge' },
@@ -110,16 +175,177 @@ const EmergencyScreen = () => {
       .catch(err => console.error('An error occurred', err));
   };
 
-  const handleShareLocation = () => {
+// Share Location
+const handleShareLocation = async () => {
+  
+
+  try {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission Denied", "Allow location access to send SOS.");
+      return;
+    }
+
+    const location = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = location.coords;
+
+    // Get all emergency numbers to notify
+    const numbersToNotify = [
+      ...parentContacts.map(contact => contact.number),
+      emergencyContacts[0].number // Police number as backup
+    ];
+
+    try {
+      // Send location  to all numbers
+      const promises = numbersToNotify.map(phoneNumber =>
+        axios.post("http://192.168.182.63:3000/send-location", {
+          phoneNumber,
+          latitude,
+          longitude,
+        })
+      );
+
+      await Promise.all(promises);
+      Alert.alert("✅ Location Sent", "Emergency alerts sent to all emergency contacts");
+
+    } catch (networkError) {
+      console.error('Network Error:', networkError);
+      Alert.alert(
+        "Unable to Send SOS",
+        "Server is unreachable. Would you like to:",
+        [
+          {
+            text: "Call Emergency Contact",
+            onPress: () => {
+              if (parentContacts.length > 0) {
+                handleCall(parentContacts[0].number);
+              } else {
+                handleCall(emergencyContacts[0].number);
+              }
+            },
+            style: "default"
+          },
+          {
+            text: "Share Location",
+            onPress: () => {
+              const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+              Linking.openURL(mapsUrl);
+            }
+          },
+          { text: "Cancel", style: "cancel" }
+        ]
+      );
+    }
+
+  } catch (error) {
+    console.error('Location Error:', error);
     Alert.alert(
-      'Share Location',
-      'This will share your current location with emergency contacts',
+      "❌ Error",
+      "Could not get your location. Please try calling emergency services directly.",
       [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Share', onPress: () => console.log('Share location') },
+        {
+          text: "Call Emergency",
+          onPress: () => {
+            if (parentContacts.length > 0) {
+              handleCall(parentContacts[0].number);
+            } else {
+              handleCall(emergencyContacts[0].number);
+            }
+          }
+        },
+        { text: "Cancel", style: "cancel" }
       ]
     );
+  } finally {
+    
+  }
+};
+
+ const sendSos = async () => {
+    setLoading(true);
+
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Alert.alert("Permission Denied", "Allow location access to send SOS.");
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      const { latitude, longitude } = location.coords;
+
+      // Get all emergency numbers to notify
+      const numbersToNotify = [
+        ...parentContacts.map(contact => contact.number),
+        emergencyContacts[0].number // Police number as backup
+      ];
+
+      try {
+        // Send SOS Alert to all numbers
+        const promises = numbersToNotify.map(phoneNumber =>
+          axios.post("http://192.168.182.63:3000/send-sos", {
+            phoneNumber,
+            latitude,
+            longitude,
+          })
+        );
+
+        await Promise.all(promises);
+        Alert.alert("✅ SOS Sent", "Emergency alerts sent to all emergency contacts");
+
+      } catch (networkError) {
+        console.error('Network Error:', networkError);
+        Alert.alert(
+          "Unable to Send SOS",
+          "Server is unreachable. Would you like to:",
+          [
+            {
+              text: "Call Emergency Contact",
+              onPress: () => {
+                if (parentContacts.length > 0) {
+                  handleCall(parentContacts[0].number);
+                } else {
+                  handleCall(emergencyContacts[0].number);
+                }
+              },
+              style: "default"
+            },
+            {
+              text: "Share Location",
+              onPress: () => {
+                const mapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
+                Linking.openURL(mapsUrl);
+              }
+            },
+            { text: "Cancel", style: "cancel" }
+          ]
+        );
+      }
+
+    } catch (error) {
+      console.error('Location Error:', error);
+      Alert.alert(
+        "❌ Error",
+        "Could not get your location. Please try calling emergency services directly.",
+        [
+          {
+            text: "Call Emergency",
+            onPress: () => {
+              if (parentContacts.length > 0) {
+                handleCall(parentContacts[0].number);
+              } else {
+                handleCall(emergencyContacts[0].number);
+              }
+            }
+          },
+          { text: "Cancel", style: "cancel" }
+        ]
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const handleRecordAudio = () => {
     Alert.alert(
@@ -143,48 +369,58 @@ const EmergencyScreen = () => {
     );
   };
 
-  const sendSos = async () => {
-    setLoading(true);
-
-    try {
-      // Get current location
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        Alert.alert("Permission Denied", "Allow location access to send SOS.");
-        setLoading(false);
-        return;
-      }
-
-      const location = await Location.getCurrentPositionAsync({});
-      const { latitude, longitude } = location.coords;
-
-      // Send SOS Alert to Backend
-      const response = await axios.post("http://localhost:3000/send-sos", {
-        phoneNumber: "+919638453973", // Using Police number as default
-        latitude,
-        longitude,
-      });
-
-      Alert.alert("✅ SOS Sent", response.data.message);
-
-      // Open Google Maps with location
-      const googleMapsUrl = `https://www.google.com/maps?q=${latitude},${longitude}`;
-      await Linking.openURL(googleMapsUrl);
-
-    } catch (error) {
-      console.error(error);
-      Alert.alert("❌ Failed to send SOS", "Please try again or call emergency services directly.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <ScrollView style={styles.container}>
       <StatusBar
         backgroundColor={semantic.background.paper}
         barStyle="dark-content"
       />
+      
+      {/* Add Contact Modal */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Add Emergency Contact</Text>
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Contact Name"
+              value={newContact.name}
+              onChangeText={(text) => setNewContact(prev => ({ ...prev, name: text }))}
+            />
+            
+            <TextInput
+              style={styles.input}
+              placeholder="Phone Number (with country code)"
+              value={newContact.number}
+              onChangeText={(text) => setNewContact(prev => ({ ...prev, number: text }))}
+              keyboardType="phone-pad"
+            />
+            
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.modalButtonText}>Cancel</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity
+                style={[styles.modalButton, styles.saveButton]}
+                onPress={saveParentContact}
+              >
+                <Text style={[styles.modalButtonText, { color: '#FFFFFF' }]}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Emergency Assistance</Text>
@@ -207,6 +443,60 @@ const EmergencyScreen = () => {
           )}
         </View>
       </TouchableOpacity>
+
+      {/* Parent Emergency Contacts Section */}
+      <View style={styles.section}>
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Parent Emergency Contacts</Text>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setModalVisible(true)}
+          >
+            <Icon name="plus" size={24} color={colors.primary.main} />
+          </TouchableOpacity>
+        </View>
+        
+        <View style={styles.contactsContainer}>
+          {parentContacts.length === 0 ? (
+            <Text style={styles.noContactsText}>
+              No parent contacts added. Add contacts to notify in case of emergency.
+            </Text>
+          ) : (
+            parentContacts.map((contact) => (
+              <View key={contact.id} style={styles.contactCard}>
+                <View style={styles.contactIcon}>
+                  <Icon name="account-heart" size={24} color="#4F46E5" />
+                </View>
+                <View style={styles.contactInfo}>
+                  <Text style={styles.contactName}>{contact.name}</Text>
+                  <Text style={styles.contactNumber}>{contact.number}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleCall(contact.number)}
+                  style={styles.callButton}
+                >
+                  <Icon name="phone" size={20} color="#4F46E5" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    Alert.alert(
+                      'Remove Contact',
+                      `Are you sure you want to remove ${contact.name}?`,
+                      [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Remove', onPress: () => deleteParentContact(contact.id), style: 'destructive' }
+                      ]
+                    );
+                  }}
+                  style={styles.deleteButton}
+                >
+                  <Icon name="delete" size={20} color="#EF4444" />
+                </TouchableOpacity>
+              </View>
+            ))
+          )}
+        </View>
+      </View>
 
       {/* Quick Actions */}
       <View style={styles.section}>
@@ -445,6 +735,82 @@ const styles = StyleSheet.create({
   },
   womensHelplineIcon: {
     backgroundColor: '#F5D0FE',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  addButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: colors.primary.light,
+  },
+  noContactsText: {
+    textAlign: 'center',
+    color: semantic.text.secondary,
+    fontSize: 14,
+    paddingVertical: 16,
+  },
+  callButton: {
+    padding: 8,
+    marginRight: 8,
+  },
+  deleteButton: {
+    padding: 8,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    width: '90%',
+    ...shadows.lg,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: semantic.text.primary,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: semantic.border.light,
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    fontSize: 16,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalButton: {
+    flex: 1,
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  cancelButton: {
+    backgroundColor: semantic.background.paper,
+    borderWidth: 1,
+    borderColor: semantic.border.light,
+  },
+  saveButton: {
+    backgroundColor: colors.primary.main,
+  },
+  modalButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
